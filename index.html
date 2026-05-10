@@ -367,6 +367,7 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
           <a href="#" onclick="switchCategory('capsules');return false" data-i18n="nav_capsules">Capsules</a>
         </div>
       </div>
+      <a class="nav-link" onclick="switchCategory('spices');return false" data-i18n="nav_spices">Spices & Wellness</a>
       <a class="nav-link" href="#nova-section" data-i18n="nav_nova">La Nova Chocolate</a>
       <a class="nav-link" href="#story" data-i18n="nav_story">Our Story</a>
     </nav>
@@ -424,6 +425,7 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
     <button class="cat-tab"        data-cat="turkish"   onclick="switchCategory('turkish')"   data-i18n="cat_turkish">Turkish Coffee</button>
     <button class="cat-tab"        data-cat="espresso"  onclick="switchCategory('espresso')"  data-i18n="cat_espresso">Espresso</button>
     <button class="cat-tab"        data-cat="capsules"  onclick="switchCategory('capsules')"  data-i18n="cat_capsules">Capsules</button>
+    <button class="cat-tab"        data-cat="spices"    onclick="switchCategory('spices')"    data-i18n="cat_spices">Spices &amp; Wellness</button>
   </div>
 </div>
 
@@ -588,7 +590,8 @@ const i18n = {
     stat1:'PRODUCTS',stat2:'COLLECTIONS',stat3:'QUALITY',
     cat_all:'All Products',cat_bahib:'Bahib Al Shay',
     cat_teabags:'Tea Bags',cat_karak:'Karak',
-    cat_turkish:'Turkish Coffee',cat_espresso:'Espresso',cat_capsules:'Capsules',
+    cat_turkish:'Turkish Coffee',cat_espresso:'Espresso',cat_capsules:'Capsules',cat_spices:'Spices & Wellness',
+    nav_spices:'Spices & Wellness',
     products_label:'Clenso Collection',products_sub:'Premium pricing for the Saudi market',
     currency:'SAR',
     nova_label:'Premium Natural Chocolate',
@@ -629,7 +632,8 @@ const i18n = {
     stat1:'منتج',stat2:'مجموعات',stat3:'جودة',
     cat_all:'كل المنتجات',cat_bahib:'بحب الشاي',
     cat_teabags:'تي باق',cat_karak:'الكرك',
-    cat_turkish:'قهوة تركي',cat_espresso:'إسبريسو',cat_capsules:'كبسولات',
+    cat_turkish:'قهوة تركي',cat_espresso:'إسبريسو',cat_capsules:'كبسولات',cat_spices:'بهارات وصحة',
+    nav_spices:'بهارات وصحة',
     products_label:'مجموعة كلينزو',products_sub:'أسعار تناسب السوق السعودي الراقي',
     currency:'ر.س',
     nova_label:'شوكولاتة طبيعية فاخرة',
@@ -684,6 +688,12 @@ const products = [
   {id:30,cat:'espresso',en:{name:'Decaf Espresso',sub:'Decaffeinated · Intensity 6 · 250g',desc:'All the flavor, none of the caffeine. Our Decaf delivers a smooth, full-bodied espresso experience — so you never have to choose between great taste and great sleep.',tags:['Intensity 6','Decaf','250g']},ar:{name:'إسبريسو ديكاف',sub:'بدون كافيين · كثافة 6 · 250 جم',desc:'كل النكهة، بلا كافيين. إسبريسو ناعم وكامل — لن تضطر أبداً للاختيار بين الطعم الرائع والنوم الهنيء.',tags:['كثافة 6','بدون كافيين','250 جم']},price:82,img:'products/COFFEE/سبريسو/espresso_decaf.png'},
   {id:31,cat:'espresso',en:{name:'Vanilla Latte Blend',sub:'Flavored Espresso · Intensity 5 · 250g',desc:'Smooth espresso kissed with the warm sweetness of natural vanilla. A gentle, aromatic blend that transforms your everyday moment into something truly special.',tags:['Intensity 5','Vanilla','250g']},ar:{name:'مزيج فانيلا لاتيه',sub:'إسبريسو منكَّه · كثافة 5 · 250 جم',desc:'إسبريسو ناعم مُعطَّر بحلاوة الفانيلا الطبيعية. مزيج لطيف وعطري يحول لحظتك اليومية إلى شيء استثنائي.',tags:['كثافة 5','فانيلا','250 جم']},price:85,img:'products/COFFEE/سبريسو/espresso_vanilla_latte.png'},
   {id:32,cat:'capsules',en:{name:'Caramel',sub:'Flavored Espresso Capsules · Intensity 5 · 10 Capsules',desc:'Rich espresso meets buttery caramel in a perfectly balanced cup. Indulgent, smooth, and irresistibly warm — a treat for every moment of the day.',tags:['Intensity 5','Caramel','10 Capsules']},ar:{name:'كراميل',sub:'كبسولات إسبريسو بالنكهة · كثافة 5 · 10 كبسولات',desc:'إسبريسو غني يلتقي بالكراميل الزبداني في فنجان متوازن تماماً. متعة ناعمة ودافئة لا تُقاوَم — علاج لكل لحظة في اليوم.',tags:['كثافة 5','كراميل','10 كبسولات']},price:72,img:'products/COFFEE/كبسولات قهوة/capsule_caramel.png',badge:'loved'},
+  {id:35,cat:'capsules',en:{name:'Mocha',sub:'Flavored Espresso Capsules · Intensity 7 · 10 Capsules',desc:'The perfect union of rich espresso and velvety chocolate. Our Mocha capsule delivers a deeply indulgent, café-quality experience in every single cup.',tags:['Intensity 7','Mocha','10 Capsules']},ar:{name:'موكا',sub:'كبسولات إسبريسو بالنكهة · كثافة 7 · 10 كبسولات',desc:'الاتحاد المثالي بين الإسبريسو الغني والشوكولاتة المخملية. كبسولة موكا تقدم تجربة مقهى عميقة وفاخرة في كل فنجان.',tags:['كثافة 7','موكا','10 كبسولات']},price:72,img:'products/COFFEE/كبسولات قهوة/capsule_mocha.png'},
+  {id:36,cat:'capsules',en:{name:'Almond',sub:'Flavored Espresso Capsules · Intensity 7 · 10 Capsules',desc:'Smooth espresso with the warm, nutty embrace of toasted almond. A sophisticated, naturally sweet pairing that elevates every morning ritual.',tags:['Intensity 7','Almond','10 Capsules']},ar:{name:'لوز',sub:'كبسولات إسبريسو بالنكهة · كثافة 7 · 10 كبسولات',desc:'إسبريسو ناعم مع عناق اللوز المحمص الدافئ. توليف متطور وحلو بشكل طبيعي يرفع كل طقس صباحي.',tags:['كثافة 7','لوز','10 كبسولات']},price:72,img:'products/COFFEE/كبسولات قهوة/capsule_almond.png'},
+  {id:37,cat:'capsules',en:{name:'Coconut',sub:'Flavored Espresso Capsules · Intensity 6 · 10 Capsules',desc:'Tropical coconut meets bold espresso in an unexpectedly refreshing cup. Light, exotic, and irresistibly smooth — a flavored capsule unlike any other.',tags:['Intensity 6','Coconut','10 Capsules']},ar:{name:'جوز هند',sub:'كبسولات إسبريسو بالنكهة · كثافة 6 · 10 كبسولات',desc:'جوز الهند الاستوائي يلتقي بالإسبريسو الجريء في كوب منعش بشكل غير متوقع. خفيف وغريب وناعم لا يُقاوَم.',tags:['كثافة 6','جوز هند','10 كبسولات']},price:72,img:'products/COFFEE/كبسولات قهوة/capsule_coconut.png'},
+  {id:38,cat:'capsules',en:{name:'Cinnamon',sub:'Flavored Espresso Capsules · Intensity 6 · 10 Capsules',desc:'Warm espresso with the spiced depth of real cinnamon. Rich, aromatic, and deeply comforting — the capsule that turns an ordinary moment into a special one.',tags:['Intensity 6','Cinnamon','10 Capsules']},ar:{name:'قرفة',sub:'كبسولات إسبريسو بالنكهة · كثافة 6 · 10 كبسولات',desc:'إسبريسو دافئ بعمق القرفة الحقيقية. غني وعطري ومريح بعمق — الكبسولة التي تحول اللحظة العادية إلى لحظة خاصة.',tags:['كثافة 6','قرفة','10 كبسولات']},price:72,img:'products/COFFEE/كبسولات قهوة/capsule_cinnamon.png'},
+  {id:39,cat:'spices',en:{name:'Pomegranate Ruby Harvest',sub:'Premium Wellness Blend · Natural Extracts · 200g',desc:'Nourish. Renew. Glow. Our Ruby Harvest pomegranate collection harnesses the full power of nature — rich in antioxidants, daily wellness in its most beautiful form.',tags:['Natural Extracts','Antioxidant Rich','Daily Wellness']},ar:{name:'رمان روبي هارفست',sub:'مزيج صحي فاخر · مستخلصات طبيعية · 200 جم',desc:'غذِّ. جدِّد. أشرق. مجموعة الرمان روبي هارفست تسخّر كامل قوة الطبيعة — غنية بمضادات الأكسدة، صحة يومية في أجمل صورها.',tags:['مستخلصات طبيعية','غني بمضادات الأكسدة','صحة يومية']},price:120,img:'products/بهارات/pomegranate_ruby_harvest.png',featured:true},
+  {id:40,cat:'spices',en:{name:'Premium Saffron',sub:'Royal Harvest · Handpicked · Pure & Authentic',desc:'Sourced from the finest fields and crafted for a royal experience. Our Premium Saffron is handpicked, 100% pure, and certified authentic — the finest spice the earth has to offer.',tags:['Handpicked','100% Pure','Royal Quality']},ar:{name:'زعفران فاخر',sub:'رويال هارفست · مقطوف باليد · نقي وأصيل',desc:'مصدره أجود الحقول وصُنع لتجربة ملكية. زعفراننا الفاخر مقطوف باليد، نقي 100%، معتمد وأصيل — أرقى ما أنتجته الأرض من البهارات.',tags:['مقطوف باليد','100% نقي','جودة ملكية']},price:185,img:'products/بهارات/saffron_royal_harvest.png',badge:'premium'},
   {id:33,cat:'capsules',en:{name:'Hazelnut',sub:'Flavored Espresso Capsules · Intensity 5 · 10 Capsules',desc:'The irresistible pairing of smooth espresso and toasted hazelnut. Rich, nutty, and deeply satisfying — the flavored capsule that coffee lovers keep coming back for.',tags:['Intensity 5','Hazelnut','10 Capsules']},ar:{name:'بندق',sub:'كبسولات إسبريسو بالنكهة · كثافة 5 · 10 كبسولات',desc:'التوليف الذي لا يُقاوَم من الإسبريسو الناعم والبندق المحمص. غني ومُكسَّر ومُشبع بعمق — الكبسولة المُنكَّهة التي يعود إليها عشاق القهوة.',tags:['كثافة 5','بندق','10 كبسولات']},price:72,img:'products/COFFEE/كبسولات قهوة/capsule_hazelnut.png'},
 ];
 
@@ -751,7 +761,7 @@ function goSlide(n){
 }
 
 let currentCat='all';
-const catKeys={all:'cat_all',bahib:'cat_bahib',teabags:'cat_teabags',karak:'cat_karak',turkish:'cat_turkish',espresso:'cat_espresso',capsules:'cat_capsules'};
+const catKeys={all:'cat_all',bahib:'cat_bahib',teabags:'cat_teabags',karak:'cat_karak',turkish:'cat_turkish',espresso:'cat_espresso',capsules:'cat_capsules',spices:'cat_spices'};
 function getCatLabel(cat){return t(catKeys[cat]||'cat_all')}
 function getBadge(k){return k?t('badge_'+k):''}
 
