@@ -226,6 +226,37 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
 .footer-bottom p{font-size:12px;color:rgba(255,255,255,.3)}
 .footer-bottom span{color:var(--gold)}
 
+/* ── ORDER FORM MODAL ── */
+.order-overlay{position:fixed;inset:0;background:rgba(26,24,20,.72);z-index:2000;
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;visibility:hidden;transition:all .3s;backdrop-filter:blur(4px)}
+.order-overlay.open{opacity:1;visibility:visible}
+.order-sheet{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:560px;
+  padding:28px 28px 40px;max-height:92vh;overflow-y:auto;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.order-overlay.open .order-sheet{transform:translateY(0)}
+.order-sheet-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
+.order-sheet-title{font-size:19px;font-weight:900;color:var(--text);margin-bottom:6px}
+.order-sheet-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.order-field{margin-bottom:14px}
+.order-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);
+  margin-bottom:5px;letter-spacing:.6px;text-transform:uppercase}
+.order-field input[type=text],.order-field input[type=tel],
+.order-field input[type=email],.order-field textarea{
+  width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;
+  font-family:'Cairo',sans-serif;font-size:14px;background:var(--bg2,#f8f6f1);
+  color:var(--text);outline:none;transition:border-color .18s;box-sizing:border-box}
+.order-field input:focus,.order-field textarea:focus{border-color:var(--gold)}
+.order-field input[type=file]{width:100%;padding:9px 12px;border:1.5px dashed var(--border);
+  border-radius:9px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;
+  color:var(--muted);box-sizing:border-box;background:var(--bg2,#f8f6f1)}
+.order-photo-preview{margin-top:8px;border-radius:10px;overflow:hidden;max-height:120px}
+.order-photo-preview img{width:100%;max-height:120px;object-fit:cover;display:block}
+.order-optional{font-size:11px;font-weight:400;color:var(--muted);margin-right:4px}
+.order-divider{border:none;border-top:1px solid var(--border);margin:18px 0}
+.order-summary-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px}
+.order-summary-total{display:flex;justify-content:space-between;font-size:15px;font-weight:800;color:var(--text)}
+
 /* ── TOAST ── */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
   background:var(--text);color:#fff;padding:11px 24px;border-radius:40px;
@@ -512,6 +543,45 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
 <div class="toast" id="toast"></div>
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
+<!-- ── ORDER INFO MODAL ── -->
+<div class="order-overlay" id="orderOverlay" onclick="closeOrderModal(event)">
+  <div class="order-sheet">
+    <div class="order-sheet-handle"></div>
+    <p class="order-sheet-title" data-i18n="order_title">بيانات التوصيل</p>
+    <p class="order-sheet-sub" data-i18n="order_sub">أدخل بياناتك لإتمام الطلب عبر واتساب</p>
+    <form id="orderForm" onsubmit="submitOrder(event)">
+      <div class="order-field">
+        <label data-i18n="ord_name_lbl">الاسم</label>
+        <input type="text" id="ord_name" required placeholder="الاسم الكامل"/>
+      </div>
+      <div class="order-field">
+        <label data-i18n="ord_phone_lbl">رقم الجوال</label>
+        <input type="tel" id="ord_phone" required placeholder="05xxxxxxxx"/>
+      </div>
+      <div class="order-field">
+        <label data-i18n="ord_email_lbl">البريد الإلكتروني</label>
+        <input type="email" id="ord_email" required placeholder="example@email.com"/>
+      </div>
+      <div class="order-field">
+        <label data-i18n="ord_address_lbl">العنوان الوطني</label>
+        <input type="text" id="ord_address" required placeholder="مثال: 1234 شارع الملك فهد، الرياض 12345"/>
+      </div>
+      <div class="order-field">
+        <label data-i18n="ord_landmark_lbl">علامة مميزة قرب الموقع</label>
+        <input type="text" id="ord_landmark" required placeholder="مثال: قرب مسجد الفيصل، مقابل صيدلية..."/>
+      </div>
+      <div class="order-field">
+        <label><span data-i18n="ord_photo_lbl">صورة المبنى</span><span class="order-optional" data-i18n="ord_optional">(اختياري)</span></label>
+        <input type="file" id="ord_photo" accept="image/*" onchange="previewBuildingPhoto(this)"/>
+        <div class="order-photo-preview" id="buildingPhotoPreview"></div>
+      </div>
+      <hr class="order-divider"/>
+      <div id="orderSummaryBlock"></div>
+      <button type="submit" class="checkout-btn" style="margin-top:8px" data-i18n="order_submit">إرسال الطلب عبر واتساب 📲</button>
+    </form>
+  </div>
+</div>
+
 <!-- CART DRAWER -->
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-header">
@@ -551,7 +621,31 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
         <label class="pay-option">
           <input type="radio" name="payment" value="visa"/>
           <div class="pay-card">
-            <svg width="50" height="16" viewBox="0 0 50 16" fill="none"><path d="M20.55 15.2h-3.84L19 .8h3.84L20.55 15.2zM34.12.8l-3.59 9.47-.42-2.15-1.26-6.43S28.7.8 27.3.8h-5.87l-.07.25s1.8.37 3.9 1.63l3.23 12.52h3.97L38.19.8h-4.07zM43.5 15.2h3.5L44.1.8H40.8c-1.17 0-1.45.9-1.45.9L33.7 15.2h3.97l.79-2.19h4.84l.2 2.19zm-4.17-5.22l2-5.5.71 5.5h-2.71zM14.1 1.98L13.54 5s-1.68-.43-3.4-.43c-1.87 0-2.74.78-2.74 1.54 0 1.65 2.86 2.1 2.86 5 0 3.42-3.14 4.28-5.53 4.28C2.9 15.4.8 14.5.8 14.5l.58-3.14s1.86.82 3.2.82 2.14-.47 2.14-1.42c0-2.05-2.86-2.1-2.86-4.8 0-3.45 3.2-4.88 5.25-4.88C10.87.8 14.1 1.98 14.1 1.98z" fill="#1A1F71"/><path d="M30.11 8.12l-1.26-6.43S28.7.8 27.3.8h-5.87l-.07.25s2.78.58 5.46 2.73c2.55 2.07 3.29 4.34 3.29 4.34z" fill="#F9A533"/></svg>
+            <!-- Visa official logo -->
+            <svg width="64" height="21" viewBox="0 0 64 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M27.4 1.2L22.6 19.8H17.8L22.6 1.2H27.4ZM48.2 13L50.7 6.3L52.1 13H48.2ZM53.7 19.8H58L54.3 1.2H50.3C49.3 1.2 48.5 1.8 48.1 2.7L41.2 19.8H46.2L47.2 17H53.3L53.7 19.8ZM40.6 13.7C40.6 8.9 33.9 8.6 33.9 6.5C33.9 5.8 34.6 5.1 36.1 4.9C37.5 4.7 39.2 4.9 40.5 5.5L41.3 1.8C40 1.3 38.3 0.8 36.2 0.8C31.5 0.8 28.2 3.3 28.2 6.9C28.2 9.6 30.7 11.1 32.6 12C34.5 12.9 35.1 13.5 35.1 14.4C35.1 15.7 33.6 16.3 32.2 16.3C30.4 16.3 28.7 15.9 27.3 15.3L26.5 19.1C27.9 19.7 30.1 20.2 32.4 20.2C37.3 20.2 40.5 17.7 40.6 13.7ZM20.5 1.2L13 19.8H7.9L4.2 5C4 4.1 3.7 3.7 3 3.3C2 2.7 0.3 2.1 -1 1.7L-0.9 1.2H7.2C8.3 1.2 9.2 1.9 9.5 3.1L11.5 13.5L16.3 1.2H20.5Z" fill="#1A1F71" transform="translate(3,0)"/>
+              <path d="M13.5 8.4C13.2 7.4 13 7 12.3 6.6C11.3 6 9.6 5.4 8.3 5L8.4 4.5H16.5C17.6 4.5 18.5 5.2 18.8 6.4L20.8 16.8L15.9 4.5" fill="#F9A533" transform="translate(-7,0)" opacity="0"/>
+            </svg>
+            <svg width="58" height="19" viewBox="0 0 780 250" fill="none">
+              <path d="M293.2 348.7l33.4-195.8h53.4l-33.4 195.8h-53.4zM544.3 157.5c-10.6-3.9-27.1-8.2-47.8-8.2-52.7 0-89.8 26.5-90.1 64.4-.3 28 26.5 43.7 46.7 53 20.8 9.6 27.7 15.7 27.7 24.3-.1 13.1-16.6 19.1-32 19.1-21.4 0-32.7-3-50.2-10.3l-6.9-3.1-7.5 43.6c12.5 5.4 35.5 10.1 59.5 10.4 56.1 0 92.5-26.2 92.9-66.8.2-22.2-14-39.2-44.9-53.1-18.7-9-30.2-15.1-30-24.2 0-8.1 9.7-16.8 30.6-16.8 17.5-.3 30.2 3.5 40 7.5l4.8 2.3 7.2-42.1zM662 152.97h-41.2c-12.8 0-22.3 3.5-27.9 16.2L514 347.5h56l9.2-24h5.1c-.3.5 1 4 1 4h49.5L662 152.97zm-65.5 126.5c4.4-11.2 21.2-54.5 21.2-54.5s4.4-11.3 7.1-18.6l3.6 16.8s10.2 46.4 12.4 56.3h-44.3zM210.7 152.97l-52.2 133.4-5.6-27c-9.7-31-39.9-64.7-73.7-81.6l47.7 170.6 56.5-.1 84-195.3h-56.7" fill="#1A1F71" transform="scale(0.074) translate(0,-130)"/>
+              <path d="M146.9 152.97H62l-.7 4.1c66 15.9 109.7 54.4 127.9 100.6l-18.4-88.3c-3.2-12.4-12.5-16-23.8-16.4" fill="#F9A533" transform="scale(0.074) translate(0,-130)"/>
+            </svg>
+          </div>
+        </label>
+        <label class="pay-option">
+          <input type="radio" name="payment" value="mada"/>
+          <div class="pay-card">
+            <!-- mada official logo -->
+            <svg width="72" height="26" viewBox="0 0 72 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="72" height="26" rx="5" fill="white"/>
+              <!-- mada green wave mark -->
+              <path d="M6 13 C6 8 10 5 14 7 C16 8 17 10 17 13 C17 16 15 19 12 19 C9 19 6 17 6 13Z" fill="#007A4E"/>
+              <path d="M14 7 C18 5 22 8 22 13 C22 18 18 20 15 19" stroke="#007A4E" stroke-width="2.5" fill="none"/>
+              <!-- mada text -->
+              <text x="25" y="17" font-family="'Arial',sans-serif" font-weight="800" font-size="11" fill="#007A4E" letter-spacing="0.5">mada</text>
+              <!-- Arabic مدى -->
+              <text x="54" y="17" font-family="'Arial',sans-serif" font-weight="700" font-size="9" fill="#007A4E">مدى</text>
+            </svg>
           </div>
         </label>
         <label class="pay-option">
@@ -561,9 +655,29 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
           </div>
         </label>
         <label class="pay-option">
-          <input type="radio" name="payment" value="mada"/>
+          <input type="radio" name="payment" value="stcpay"/>
           <div class="pay-card">
-            <svg width="54" height="20" viewBox="0 0 54 20" fill="none"><rect width="54" height="20" rx="4" fill="#0B7D3E"/><text x="6" y="14" font-family="Arial" font-weight="700" font-size="11" fill="white" letter-spacing="1">mada</text></svg>
+            <!-- STC Pay logo -->
+            <svg width="70" height="26" viewBox="0 0 70 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="70" height="26" rx="5" fill="#6B1F7C"/>
+              <text x="7" y="17" font-family="'Arial',sans-serif" font-weight="900" font-size="10" fill="white" letter-spacing="0.3">stc</text>
+              <rect x="28" y="7" width="1.5" height="12" rx="1" fill="rgba(255,255,255,0.4)"/>
+              <text x="32" y="17" font-family="'Arial',sans-serif" font-weight="700" font-size="10" fill="#A8FF78" letter-spacing="0.3">pay</text>
+            </svg>
+          </div>
+        </label>
+        <label class="pay-option">
+          <input type="radio" name="payment" value="urpay"/>
+          <div class="pay-card">
+            <!-- UrPay (Al Rajhi) logo -->
+            <svg width="72" height="26" viewBox="0 0 72 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="72" height="26" rx="5" fill="#1B3A6B"/>
+              <!-- ur arc symbol -->
+              <path d="M7 18 C7 12 10 8 14 8 C18 8 20 12 20 15" stroke="#F0A500" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <circle cx="20" cy="16" r="2" fill="#F0A500"/>
+              <text x="25" y="17" font-family="'Arial',sans-serif" font-weight="800" font-size="9.5" fill="white" letter-spacing="0.3">urpay</text>
+              <text x="50" y="17" font-family="'Arial',sans-serif" font-weight="600" font-size="8" fill="#F0A500">يور باي</text>
+            </svg>
           </div>
         </label>
       </div>
@@ -615,6 +729,11 @@ const i18n = {
     cart_subtotal:'Subtotal',cart_shipping:'Shipping',cart_free:'Free',
     cart_total:'Total',pay_title:'Payment Method',
     checkout_btn:'Place Order',toast_added:'added to cart',cart_remove:'Remove',
+    order_title:'Delivery Information',order_sub:'Enter your details to complete the order via WhatsApp',
+    ord_name_lbl:'Full Name',ord_phone_lbl:'Phone Number',ord_email_lbl:'Email',
+    ord_address_lbl:'National Address',ord_landmark_lbl:'Nearby Landmark',
+    ord_photo_lbl:'Building Photo ',ord_optional:'(optional)',
+    order_submit:'Send Order via WhatsApp 📲',
   },
   ar:{
     nav_tea:'الشاي',nav_bahib:'بحب الشاي',nav_teabags:'تي باق',
@@ -657,6 +776,11 @@ const i18n = {
     cart_subtotal:'المجموع الفرعي',cart_shipping:'الشحن',cart_free:'مجاني',
     cart_total:'الإجمالي',pay_title:'طريقة الدفع',
     checkout_btn:'إتمام الطلب',toast_added:'أُضيف إلى السلة',cart_remove:'حذف',
+    order_title:'بيانات التوصيل',order_sub:'أدخل بياناتك لإتمام الطلب عبر واتساب',
+    ord_name_lbl:'الاسم الكامل',ord_phone_lbl:'رقم الجوال',ord_email_lbl:'البريد الإلكتروني',
+    ord_address_lbl:'العنوان الوطني',ord_landmark_lbl:'علامة مميزة قرب الموقع',
+    ord_photo_lbl:'صورة المبنى ',ord_optional:'(اختياري)',
+    order_submit:'إرسال الطلب عبر واتساب 📲',
   }
 };
 
@@ -898,11 +1022,66 @@ function closeCart(){
   document.body.style.overflow='';
 }
 function checkout(){
+  if(!Object.keys(cart).length) return;
+  // Build order summary inside modal
+  const total=Object.values(cart).reduce((s,{p,qty})=>s+p.price*qty,0);
+  const rows=Object.values(cart).map(({p,qty})=>{
+    const d=p[currentLang];
+    return `<div class="order-summary-row"><span>${d.name} × ${qty}</span><span>${p.price*qty} ${t('currency')}</span></div>`;
+  }).join('');
+  document.getElementById('orderSummaryBlock').innerHTML=
+    rows+`<div class="order-summary-total"><span>${t('cart_total')}</span><span>${total} ${t('currency')}</span></div>`;
+  document.getElementById('orderOverlay').classList.add('open');
+}
+function closeOrderModal(e,force){
+  if(force||e?.target===document.getElementById('orderOverlay'))
+    document.getElementById('orderOverlay').classList.remove('open');
+}
+function previewBuildingPhoto(input){
+  const preview=document.getElementById('buildingPhotoPreview');
+  preview.innerHTML='';
+  if(input.files&&input.files[0]){
+    const img=document.createElement('img');
+    img.src=URL.createObjectURL(input.files[0]);
+    preview.appendChild(img);
+  }
+}
+function submitOrder(e){
+  e.preventDefault();
+  const name=document.getElementById('ord_name').value.trim();
+  const phone=document.getElementById('ord_phone').value.trim();
+  const email=document.getElementById('ord_email').value.trim();
+  const address=document.getElementById('ord_address').value.trim();
+  const landmark=document.getElementById('ord_landmark').value.trim();
+  const hasPhoto=document.getElementById('ord_photo').files.length>0;
   const method=document.querySelector('input[name="payment"]:checked')?.value||'';
-  showToast(currentLang==='en'?`Order placed via ${method.toUpperCase()}`:`تم الطلب عبر ${method.toUpperCase()}`);
+  const total=Object.values(cart).reduce((s,{p,qty})=>s+p.price*qty,0);
+  const items=Object.values(cart).map(({p,qty})=>{
+    const d=p[currentLang];
+    return `• ${d.name} × ${qty}  →  ${p.price*qty} ${t('currency')}`;
+  }).join('\n');
+  const payNames={visa:'Visa',mada:'مدى',mastercard:'Mastercard',applepay:'Apple Pay',stcpay:'STC Pay',urpay:'UrPay يور باي'};
+  const msg=
+    `🛍️ *طلب جديد — كلينزو*\n`+
+    `━━━━━━━━━━━━━━━━\n`+
+    `👤 الاسم: ${name}\n`+
+    `📞 الجوال: ${phone}\n`+
+    `📧 الإيميل: ${email}\n`+
+    `🏠 العنوان: ${address}\n`+
+    `📍 علامة مميزة: ${landmark}\n`+
+    (hasPhoto?`📸 صورة المبنى: سيتم إرسالها\n`:``)+
+    `💳 الدفع: ${payNames[method]||method}\n`+
+    `━━━━━━━━━━━━━━━━\n`+
+    `${items}\n`+
+    `━━━━━━━━━━━━━━━━\n`+
+    `💰 الإجمالي: ${total} ${t('currency')}`;
+  window.open(`https://wa.me/966539460440?text=${encodeURIComponent(msg)}`,'_blank');
+  closeOrderModal(null,true);
   closeCart();
   Object.keys(cart).forEach(k=>delete cart[k]);
   updateCartUI();
+  document.getElementById('orderForm').reset();
+  document.getElementById('buildingPhotoPreview').innerHTML='';
 }
 function showToast(msg){
   const el=document.getElementById('toast');
