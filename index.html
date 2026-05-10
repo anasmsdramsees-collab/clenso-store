@@ -441,8 +441,8 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
 <section class="nova-section" id="nova-section">
   <div class="container">
     <p class="nova-label" data-i18n="nova_label">Special Edition</p>
-    <img src="logo/lanova_logo_extracted.png" alt="La Nova"
-         style="height:72px;width:auto;margin:0 auto 20px;display:block;object-fit:contain"/>
+    <img src="logo/ChatGPT Image May 10, 2026, 06_23_20 PM.png" alt="La Nova"
+         style="height:120px;width:auto;margin:0 auto 20px;display:block;object-fit:contain"/>
     <h2 class="nova-title" data-i18n-html="nova_title">La Nova<br/><em>Chocolate</em></h2>
     <p class="nova-sub" data-i18n="nova_sub">The hot chocolate you cannot resist. Crafted for those who seek warmth in every sip — drama in every cup.</p>
     <div class="nova-grid" id="novaGrid"></div>
@@ -568,7 +568,7 @@ const i18n = {
   en:{
     nav_tea:'Tea',nav_bahib:'Bahib Al Shay',nav_fruits:'Fruit Infusions',
     nav_karak:'Karak',nav_coffee:'Coffee',nav_coffee_all:'All Coffee',
-    nav_nova:'La Nova Chocolate',nav_story:'Our Story',
+    nav_nova:'La Nova Chocolates',nav_story:'Our Story',
     nav_shop:'Shop Now',nav_cart:'Cart',
     hero_label:'Remsees Foods x Clenso',
     hero_title:'Where the<br/><em>Story</em><br/>Begins',
@@ -585,10 +585,10 @@ const i18n = {
     cat_fruits:'Fruit Infusions',cat_karak:'Karak',cat_coffee:'Coffee',
     products_label:'Clenso Collection',products_sub:'Premium pricing for the Saudi market',
     currency:'SAR',
-    nova_label:'Special Edition',
-    nova_title:'La Nova<br/><em>Chocolate</em>',
-    nova_sub:'The hot chocolate you cannot resist. Crafted for those who seek warmth in every sip &#8212; drama in every cup.',
-    nova_cat:'La Nova Chocolate',
+    nova_label:'Premium Natural Chocolate',
+    nova_title:'La Nova<br/><em>Chocolates</em>',
+    nova_sub:'Real ingredients. No shortcuts. La Nova is crafted from the finest natural cacao — pure chocolate bars and artisan bonbons made the way chocolate was always meant to be.',
+    nova_cat:'La Nova Chocolates',
     footer_desc:'Tea, coffee and spice products by Remsees Foods &#8212; because beautiful moments deserve the finest drink.',
     footer_products:'Products',footer_company:'Company',footer_contact:'Contact',
     footer_story:'Our Story',footer_remsees:'Remsees Foods',
@@ -607,7 +607,7 @@ const i18n = {
   ar:{
     nav_tea:'الشاي',nav_bahib:'بحب الشاي',nav_fruits:'انفوزيون فواكه',
     nav_karak:'الكرك',nav_coffee:'القهوة',nav_coffee_all:'كل القهوة',
-    nav_nova:'لا نوفا شوكليت',nav_story:'قصتنا',
+    nav_nova:'لا نوفا شوكليتس',nav_story:'قصتنا',
     nav_shop:'تسوق الآن',nav_cart:'السلة',
     hero_label:'رمسيس فودز x كلينزو',
     hero_title:'حيث تبدأ<br/><em>الرواية</em><br/>بأول رشفة',
@@ -624,10 +624,10 @@ const i18n = {
     cat_fruits:'انفوزيون فواكه',cat_karak:'الكرك',cat_coffee:'القهوة',
     products_label:'مجموعة كلينزو',products_sub:'أسعار تناسب السوق السعودي الراقي',
     currency:'ر.س',
-    nova_label:'إصدار خاص',
-    nova_title:'لا نوفا<br/><em>شوكليت</em>',
-    nova_sub:'مشروب الشوكولاتة الذي لا تقاومه. صُنع لمن يبحث عن الدفء في كل رشفة &#8212; دراما في كل كوب.',
-    nova_cat:'لا نوفا شوكليت',
+    nova_label:'شوكولاتة طبيعية فاخرة',
+    nova_title:'لا نوفا<br/><em>شوكليتس</em>',
+    nova_sub:'مكونات حقيقية. بدون اختصارات. لا نوفا مصنوعة من أجود الكاكاو الطبيعي — ألواح شوكولاتة خالصة وبونبون حرفي، على الطريقة التي كانت الشوكولاتة دائماً تستحقها.',
+    nova_cat:'لا نوفا شوكليتس',
     footer_desc:'منتجات الشاي والقهوة والبهارات من رمسيس فودز &#8212; لأن اللحظة الجميلة تستحق المشروب الأجمل.',
     footer_products:'المنتجات',footer_company:'الشركة',footer_contact:'التواصل',
     footer_story:'قصتنا',footer_remsees:'رمسيس فودز',
@@ -673,10 +673,12 @@ const products = [
 ];
 
 const novaProducts = [
-  {id:'n1',en:{name:'La Nova Dark Chocolate',sub:'Premium Hot Chocolate',desc:'The dark chocolate that admits life is complex — rich, slightly bitter, always thrilling. A cup that understands you.'},ar:{name:'لا نوفا داك شوكليت',sub:'شوكولاتة ساخنة فاخرة',desc:'الشوكولاتة الداكنة التي تعترف بأن الحياة معقدة — غنية ومريرة قليلاً ومثيرة دائماً.'},price:85,img:null},
-  {id:'n2',en:{name:'La Nova Milk Cream',sub:'Premium Hot Chocolate',desc:'Milk chocolate that takes you back to a childhood you did not live enough — warm, reassuring, and endlessly comforting.'},ar:{name:'لا نوفا ميلك كريم',sub:'شوكولاتة ساخنة فاخرة',desc:'شوكولاتة الحليب التي تعود بك إلى طفولة لم تعشها بما يكفي — دافئة ومطمئنة.'},price:79,img:null,badge:'loved'},
-  {id:'n3',en:{name:'La Nova Hot White',sub:'Premium Hot Chocolate',desc:'Hot white chocolate — a beautiful contradiction. Boundless sweetness, silky texture, an experience you cannot resist.'},ar:{name:'لا نوفا هوت وايت',sub:'شوكولاتة ساخنة فاخرة',desc:'الشوكولاتة البيضاء الساخنة — تناقض جميل. حلاوة بلا حدود وتجربة لا تُقاوَم.'},price:75,img:null},
-  {id:'n4',en:{name:'La Nova Sea Salt Caramel',sub:'Premium Hot Chocolate',desc:'Salt and sweetness in an eternal dance. When flavors contrast, unforgettable moments are born — this is that moment.'},ar:{name:'لا نوفا سيا سولت كراميل',sub:'شوكولاتة ساخنة فاخرة',desc:'الملح والحلاوة في رقصة أبدية. حين تتضاد الطعوم تولد اللحظات التي لا تُنسى.'},price:98,img:null,badge:'special'},
+  {id:'n1',en:{name:'Dark Chocolate',sub:'La Nova Chocolate Bar',desc:'Bold, intense, and unapologetically rich. Our dark chocolate is crafted for those who appreciate the true depth of cacao — complex, smooth, and utterly satisfying.',tags:['70% Cacao','Premium Bar','Intense']},ar:{name:'شوكولاتة داكنة',sub:'لوح شوكولاتة لا نوفا',desc:'جريئة وكثيفة وغنية بلا اعتذار. شوكولاتتنا الداكنة لمن يقدّر العمق الحقيقي للكاكاو — معقدة وناعمة ومُشبعة تماماً.',tags:['70% كاكاو','لوح فاخر','كثيف']},price:55,img:'products/ chocolate/dark choc.png'},
+  {id:'n2',en:{name:'Milk Chocolate',sub:'La Nova Chocolate Bar',desc:'Silky smooth milk chocolate that melts the moment it touches your lips. Warm, creamy, and impossibly comforting — the purest form of everyday luxury.',tags:['Milk Chocolate','Silky Smooth','Premium Bar']},ar:{name:'شوكولاتة حليب',sub:'لوح شوكولاتة لا نوفا',desc:'شوكولاتة حليب حريرية ناعمة تذوب لحظة لمسها شفتيك. دافئة وكريمية ومريحة بشكل لا يُصدق — أنقى أشكال الرفاهية اليومية.',tags:['شوكولاتة حليب','ناعمة حريرية','لوح فاخر']},price:50,img:'products/ chocolate/milke choclate.png',badge:'loved'},
+  {id:'n3',en:{name:'White Chocolate',sub:'La Nova Chocolate Bar',desc:'Creamy, delicate, and endlessly sweet. Our white chocolate is a gentle indulgence — smooth as ivory, rich as a memory you never want to forget.',tags:['White Chocolate','Creamy','Premium Bar']},ar:{name:'شوكولاتة بيضاء',sub:'لوح شوكولاتة لا نوفا',desc:'كريمية ورقيقة وحلوة بلا حدود. شوكولاتتنا البيضاء متعة لطيفة — ناعمة كالعاج وغنية كذكرى لا تريد نسيانها.',tags:['شوكولاتة بيضاء','كريمية','لوح فاخر']},price:50,img:'products/ chocolate/whit choc.png'},
+  {id:'n4',en:{name:'Bonbons · 4 Pieces',sub:'La Nova Artisan Bonbons',desc:'Four handcrafted bonbons, each a different world. A perfect little gift — or a perfect little secret between you and your best moments.',tags:['4 Pieces','Handcrafted','Gift Ready']},ar:{name:'بونبون · 4 قطع',sub:'بونبون حرفي لا نوفا',desc:'أربع بونبون صُنعت بالأيدي، كل واحدة عالم مختلف. هدية صغيرة مثالية — أو سرٌّ صغير مثالي بينك وبين أجمل لحظاتك.',tags:['4 قطع','صُنع يدوياً','جاهز للهدية']},price:65,img:'products/ chocolate/bonbons 4.png'},
+  {id:'n5',en:{name:'Bonbons · 8 Pieces',sub:'La Nova Artisan Bonbons',desc:'Eight moments of pure indulgence. Our signature bonbons blend dark, milk, and white chocolate into an experience crafted for those who deserve the finest.',tags:['8 Pieces','Handcrafted','Premium Selection']},ar:{name:'بونبون · 8 قطع',sub:'بونبون حرفي لا نوفا',desc:'ثماني لحظات من المتعة الخالصة. بونبوناتنا المميزة تمزج الشوكولاتة الداكنة والحليب والبيضاء في تجربة صُنعت لمن يستحق الأفضل.',tags:['8 قطع','صُنع يدوياً','تشكيلة فاخرة']},price:115,img:'products/ chocolate/bonbons 8.png',badge:'bestseller'},
+  {id:'n6',en:{name:'Bonbons · 16 Pieces',sub:'La Nova Artisan Bonbons',desc:'The ultimate La Nova experience. Sixteen exquisite bonbons presented in our signature navy gift box — for occasions that deserve to be remembered forever.',tags:['16 Pieces','Handcrafted','Luxury Gift']},ar:{name:'بونبون · 16 قطعة',sub:'بونبون حرفي لا نوفا',desc:'التجربة الكاملة من لا نوفا. ستة عشر بونبون فاخرة مُقدَّمة في علبة الهدايا الكحلية المميزة — للمناسبات التي تستحق أن تُذكَر إلى الأبد.',tags:['16 قطعة','صُنع يدوياً','هدية فاخرة']},price:195,img:'products/ chocolate/bonbons 16.png',badge:'special'},
 ];
 
 let currentLang='en';
@@ -700,6 +702,8 @@ function setLang(lang){
 function t(k){return i18n[currentLang][k]||k}
 
 const posters=[
+  'بوستر العيد .png',
+  'بوستر العيد ٢.png',
   'ChatGPT Image May 6, 2026 at 01_45_22 PM.png',
   'ChatGPT Image May 6, 2026 at 01_45_30 PM.png',
   'ChatGPT Image May 6, 2026 at 01_48_36 PM (1).png',
