@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Clenso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#C9A84C;--gold-dark:#A8893A;--gold-bg:rgba(201,168,76,.07);
+  --text:#1A1814;--text2:#3D3628;--muted:#7A6E62;--muted2:#AFA398;
+  --bg:#FFFFFF;--bg-light:#F7F4EF;--bg-section:#F0ECE5;
+  --border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.05);
+  --shadow:0 2px 14px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 24px rgba(0,0,0,0.09);
+  --shadow-lg:0 10px 44px rgba(0,0,0,0.13);
+  --nova:#C0536A;--nova-light:#E8899A;--nova-bg:#FDF0F3;
+  --r:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--text);height:38px;display:flex;align-items:center}
+.topbar-inner{max-width:1320px;margin:0 auto;padding:0 48px;width:100%;
+  display:flex;align-items:center;justify-content:space-between}
+.topbar-left{font-size:12px;color:rgba(255,255,255,.55);font-weight:400;letter-spacing:.5px}
+.topbar-left span{color:var(--gold);font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-right button{background:none;border:none;color:rgba(255,255,255,.6);
+  font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;
+  letter-spacing:1px;padding:0;transition:color .2s}
+.topbar-right button:hover{color:var(--gold)}
+.cart-btn-top{display:flex;align-items:center;gap:5px;position:relative}
+.cart-badge{position:absolute;top:-7px;right:-8px;width:17px;height:17px;
+  background:var(--gold);color:#fff;border-radius:50%;font-size:9px;
+  font-weight:800;display:none;align-items:center;justify-content:center}
+[dir=rtl] .cart-badge{right:auto;left:-8px}
+
+/* ── HEADER ── */
+header{position:sticky;top:0;left:0;right:0;z-index:900;background:#fff;
+  border-bottom:1px solid var(--border);box-shadow:0 1px 6px rgba(0,0,0,0.04)}
+.header-inner{max-width:1320px;margin:0 auto;height:70px;padding:0 48px;
+  display:flex;align-items:center;gap:24px}
+.logo img{height:44px;width:auto;display:block}
+nav{flex:1;display:flex;align-items:center}
+.nav-item{position:relative}
+.nav-link{display:flex;align-items:center;gap:4px;padding:10px 16px;
+  color:var(--text2);font-size:14px;font-weight:600;cursor:pointer;
+  background:none;border:none;font-family:'Cairo',sans-serif;white-space:nowrap;
+  transition:color .2s;position:relative;text-decoration:none}
+.nav-link::after{content:'';position:absolute;bottom:0;left:16px;right:16px;
+  height:2px;background:var(--gold);border-radius:2px;
+  transform:scaleX(0);transition:transform .22s}
+.nav-link:hover{color:var(--gold-dark)}
+.nav-link:hover::after{transform:scaleX(1)}
+.arrow{font-size:8px;opacity:.5;transition:transform .22s}
+.nav-item:hover .arrow{transform:rotate(180deg)}
+.dropdown{position:absolute;top:100%;left:0;background:#fff;
+  border:1px solid var(--border);border-radius:8px;padding:6px;min-width:200px;
+  opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .2s;
+  box-shadow:var(--shadow-md);z-index:10}
+[dir=rtl] .dropdown{left:auto;right:0}
+.nav-item:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.dropdown a{display:block;padding:9px 14px;color:var(--text2);text-decoration:none;
+  font-size:13px;border-radius:6px;transition:all .18s;font-weight:500}
+.dropdown a:hover{color:var(--gold-dark);background:var(--bg-light)}
+.btn-cta{background:var(--gold);color:#fff;padding:9px 22px;border-radius:8px;
+  font-weight:700;font-size:13px;text-decoration:none;transition:all .2s;
+  white-space:nowrap;font-family:'Cairo',sans-serif;flex-shrink:0}
+.btn-cta:hover{background:var(--gold-dark);box-shadow:0 4px 14px rgba(201,168,76,.35)}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;min-height:580px;overflow:hidden;
+  display:flex;align-items:center;margin-top:0}
+.slides-wrapper{position:absolute;inset:0}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
+.slide.active{opacity:1}
+.slide img{width:100%;height:100%;object-fit:cover}
+.slide-overlay{position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(26,24,20,.84) 36%,rgba(26,24,20,.08) 100%)}
+[dir=rtl] .slide-overlay{background:linear-gradient(to left,rgba(26,24,20,.84) 36%,rgba(26,24,20,.08) 100%)}
+.hero-content{position:relative;z-index:2;max-width:580px;padding:0 80px}
+[dir=rtl] .hero-content{margin-left:auto;margin-right:0}
+.hero-tag{display:inline-block;border:1px solid rgba(201,168,76,.4);
+  color:var(--gold);font-size:11px;font-weight:700;letter-spacing:4px;
+  text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:20px}
+.hero-title{font-size:clamp(36px,5vw,72px);font-weight:800;line-height:1.08;
+  color:#fff;margin-bottom:18px;letter-spacing:-1px}
+.hero-title em{color:var(--gold);font-style:normal}
+.hero-sub{font-size:16px;font-weight:400;color:rgba(255,255,255,.72);
+  line-height:1.9;margin-bottom:34px;max-width:430px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{padding:12px 28px;background:var(--gold);color:#fff;
+  text-decoration:none;border-radius:8px;font-weight:700;font-size:14px;
+  transition:all .22s;font-family:'Cairo',sans-serif}
+.btn-primary:hover{background:var(--gold-dark);transform:translateY(-2px);
+  box-shadow:0 8px 22px rgba(201,168,76,.35)}
+.btn-outline{padding:12px 28px;border:2px solid rgba(255,255,255,.45);color:#fff;
+  text-decoration:none;border-radius:8px;font-weight:600;font-size:14px;
+  transition:all .22s;font-family:'Cairo',sans-serif}
+.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.1);transform:translateY(-2px)}
+.slide-dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);
+  cursor:pointer;transition:all .3s}
+.dot.active{width:22px;border-radius:4px;background:var(--gold)}
+
+/* ── SHARED ── */
+.container{max-width:1320px;margin:0 auto;padding:0 48px}
+.sec-tag{font-size:11px;font-weight:700;letter-spacing:4px;color:var(--gold-dark);
+  text-transform:uppercase;margin-bottom:10px}
+.sec-title{font-size:clamp(24px,3.2vw,42px);font-weight:800;color:var(--text);
+  line-height:1.2;margin-bottom:12px}
+.divider{width:44px;height:3px;background:var(--gold);border-radius:2px;margin:14px 0 22px}
+
+/* ── STORY ── */
+.story{background:var(--bg-light);padding:90px 0}
+.story-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+[dir=rtl] .story-inner{direction:rtl}
+.story-img{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;
+  box-shadow:var(--shadow-lg)}
+.story-img img{width:100%;height:100%;object-fit:cover}
+.story-img-badge{position:absolute;bottom:18px;left:18px;background:var(--gold);
+  color:#fff;padding:10px 14px;border-radius:8px;font-weight:700;
+  font-size:11px;text-align:center;line-height:1.6;box-shadow:var(--shadow-md)}
+[dir=rtl] .story-img-badge{left:auto;right:18px}
+.story-text p{font-size:15px;color:var(--text2);line-height:2;margin-bottom:16px;font-weight:400}
+.story-text p strong{color:var(--text);font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  margin-top:34px;padding-top:34px;border-top:1px solid var(--border)}
+.stat{text-align:center;padding:16px 8px;background:var(--bg);border-radius:8px;
+  border:1px solid var(--border2)}
+.stat-num{font-size:28px;font-weight:800;color:var(--gold);display:block}
+.stat-lbl{font-size:10px;color:var(--muted);letter-spacing:2px;font-weight:600}
+
+/* ── CATEGORY BAR ── */
+.cat-bar-wrap{background:var(--bg);border-bottom:1px solid var(--border);
+  position:sticky;top:70px;z-index:800}
+.cat-bar{max-width:1320px;margin:0 auto;padding:0 48px;display:flex;
+  overflow-x:auto;scrollbar-width:none}
+.cat-bar::-webkit-scrollbar{display:none}
+.cat-tab{padding:18px 22px;font-size:14px;font-weight:600;color:var(--muted);
+  cursor:pointer;border:none;border-bottom:3px solid transparent;white-space:nowrap;
+  transition:all .2s;background:none;font-family:'Cairo',sans-serif}
+.cat-tab:hover{color:var(--text)}
+.cat-tab.active{color:var(--gold-dark);border-bottom-color:var(--gold)}
+
+/* ── PRODUCTS ── */
+.products-section{background:var(--bg-section);padding:60px 0}
+.products-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:20px}
+.product-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;transition:all .28s;position:relative;box-shadow:var(--shadow)}
+.product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);
+  border-color:rgba(201,168,76,.28)}
+.product-badge{position:absolute;top:12px;left:12px;z-index:2;
+  background:var(--gold);color:#fff;font-size:10px;font-weight:700;
+  padding:4px 10px;border-radius:20px}
+[dir=rtl] .product-badge{left:auto;right:12px}
+.product-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.product-info{padding:15px}
+.product-cat{font-size:10px;letter-spacing:3px;color:var(--gold-dark);
+  text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.product-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.35}
+.product-sub{font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:500}
+.product-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:9px}
+.product-tag{font-size:10px;color:var(--muted);border:1px solid var(--border);
+  padding:2px 8px;border-radius:20px;font-weight:500}
+.product-desc{font-size:12px;color:var(--muted2);line-height:1.8;margin-bottom:12px}
+.product-footer{display:flex;align-items:center;justify-content:space-between;
+  padding-top:11px;border-top:1px solid var(--border2)}
+.product-price{font-size:19px;font-weight:800;color:var(--text)}
+.product-price span{font-size:12px;font-weight:500;color:var(--muted);margin-left:3px}
+[dir=rtl] .product-price span{margin-left:0;margin-right:3px}
+.add-btn{width:33px;height:33px;border-radius:50%;background:var(--gold);color:#fff;
+  border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;transition:all .22s;font-weight:700;line-height:1}
+.add-btn:hover{background:var(--gold-dark);transform:scale(1.1)}
+
+/* ── NOVA ── */
+.nova-section{background:var(--nova-bg);border-top:1px solid rgba(192,83,106,.1);
+  border-bottom:1px solid rgba(192,83,106,.1);padding:90px 0;text-align:center}
+.nova-label{font-size:10px;letter-spacing:6px;color:var(--nova);text-transform:uppercase;
+  margin-bottom:12px;font-weight:700}
+.nova-title{font-size:clamp(30px,4.5vw,58px);font-weight:800;color:var(--text);margin-bottom:12px}
+.nova-title em{color:var(--nova);font-style:normal}
+.nova-sub{font-size:15px;color:var(--muted);max-width:480px;margin:0 auto 52px;line-height:1.9}
+.nova-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;text-align:left}
+[dir=rtl] .nova-grid{text-align:right}
+.nova-card{background:var(--bg);border:1px solid rgba(192,83,106,.14);
+  border-radius:var(--r);overflow:hidden;transition:all .28s;box-shadow:var(--shadow)}
+.nova-card:hover{transform:translateY(-4px);border-color:rgba(192,83,106,.35);
+  box-shadow:0 10px 36px rgba(192,83,106,.12)}
+.nova-placeholder{width:100%;aspect-ratio:1/1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;background:var(--nova-bg)}
+.nova-placeholder-icon{width:44px;height:44px;opacity:.22;color:var(--nova)}
+.nova-placeholder-text{font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(192,83,106,.45);font-weight:600}
+.nova-cat{color:var(--nova)!important}
+.nova-add{background:var(--nova)!important}
+.nova-add:hover{background:#a8445e!important}
+
+/* ── FOOTER ── */
+footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:52px;
+  padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,.09)}
+.footer-brand p{font-size:14px;line-height:1.9;margin-bottom:18px}
+.footer-logo-img{height:36px;margin-bottom:14px;display:block;
+  filter:brightness(0) invert(1);opacity:.85}
+.footer-social{display:flex;gap:8px}
+.social-btn{width:34px;height:34px;border-radius:7px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.11);display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.45);text-decoration:none;transition:all .22s}
+.social-btn:hover{border-color:var(--gold);color:var(--gold)}
+.footer-col h4{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.85);
+  text-transform:uppercase;margin-bottom:16px;font-weight:700}
+.footer-col a{display:block;color:rgba(255,255,255,.45);text-decoration:none;
+  font-size:13px;margin-bottom:9px;transition:color .18s;font-weight:400}
+.footer-col a:hover{color:var(--gold)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:22px}
+.footer-bottom p{font-size:12px;color:rgba(255,255,255,.3)}
+.footer-bottom span{color:var(--gold)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--text);color:#fff;padding:11px 24px;border-radius:40px;
+  font-size:13px;font-weight:600;z-index:9999;transition:transform .3s ease;
+  white-space:nowrap;box-shadow:var(--shadow-md)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── CART DRAWER ── */
+.cart-overlay{position:fixed;inset:0;background:rgba(26,24,20,.38);z-index:1000;
+  opacity:0;visibility:hidden;transition:all .3s;backdrop-filter:blur(3px)}
+.cart-overlay.open{opacity:1;visibility:visible}
+.cart-drawer{position:fixed;top:0;right:-480px;width:480px;height:100vh;
+  background:#fff;border-left:1px solid var(--border);z-index:1100;
+  transition:right .32s cubic-bezier(.4,0,.2,1);display:flex;
+  flex-direction:column;overflow:hidden;box-shadow:-6px 0 36px rgba(0,0,0,.1)}
+[dir=rtl] .cart-drawer{right:auto;left:-480px;border-left:none;border-right:1px solid var(--border)}
+.cart-drawer.open{right:0}
+[dir=rtl] .cart-drawer.open{right:auto;left:0}
+.cart-header{display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px;border-bottom:1px solid var(--border)}
+.cart-header h3{font-size:17px;font-weight:700;color:var(--text)}
+.cart-close{background:none;border:none;color:var(--muted);font-size:20px;
+  cursor:pointer;width:32px;height:32px;display:flex;align-items:center;
+  justify-content:center;border-radius:50%;transition:all .18s}
+.cart-close:hover{color:var(--text);background:var(--bg-light)}
+.cart-body{flex:1;overflow-y:auto;padding:18px 24px;scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent}
+.cart-empty{text-align:center;padding:56px 20px;color:var(--muted)}
+.cart-empty-icon{margin-bottom:12px;opacity:.25}
+.cart-empty p{font-size:14px;line-height:1.8}
+.cart-item{display:flex;gap:13px;padding:14px 0;border-bottom:1px solid var(--border)}
+.cart-item:last-child{border-bottom:none}
+.cart-item-img{width:66px;height:66px;border-radius:8px;object-fit:cover;
+  background:var(--bg-section);flex-shrink:0;border:1px solid var(--border2)}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-size:14px;font-weight:600;color:var(--text);
+  margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-sub{font-size:11px;color:var(--muted);margin-bottom:8px}
+.cart-item-row{display:flex;align-items:center;justify-content:space-between}
+.qty-control{display:flex;align-items:center;gap:7px}
+.qty-btn{width:25px;height:25px;border-radius:50%;border:1px solid var(--border);
+  background:none;color:var(--text);font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .18s;line-height:1}
+.qty-btn:hover{border-color:var(--gold);color:var(--gold-dark)}
+.qty-num{font-size:14px;font-weight:700;min-width:20px;text-align:center;color:var(--text)}
+.cart-item-price{font-size:14px;font-weight:700;color:var(--text)}
+.cart-remove{background:none;border:none;color:var(--muted2);font-size:11px;
+  cursor:pointer;padding:0;margin-top:5px;display:block;transition:color .18s;
+  font-family:'Cairo',sans-serif}
+.cart-remove:hover{color:#e57373}
+.cart-footer{padding:18px 24px;border-top:1px solid var(--border);flex-shrink:0;background:#fff}
+.cart-summary{margin-bottom:18px}
+.cart-summary-row{display:flex;justify-content:space-between;
+  font-size:13px;color:var(--muted);margin-bottom:7px}
+.cart-summary-row.total{font-size:16px;font-weight:800;color:var(--text);
+  border-top:1px solid var(--border);padding-top:11px;margin-top:11px}
+.cart-summary-row.total span:last-child{color:var(--gold-dark)}
+.payment-section{margin-bottom:16px}
+.payment-title{font-size:11px;letter-spacing:3px;color:var(--muted);
+  text-transform:uppercase;margin-bottom:9px;font-weight:700}
+.payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.pay-option{cursor:pointer}
+.pay-option input{display:none}
+.pay-card{display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;
+  transition:all .18s;height:44px;background:#fff}
+.pay-option input:checked + .pay-card{border-color:var(--gold);background:var(--gold-bg)}
+.pay-card:hover{border-color:rgba(201,168,76,.4)}
+.pay-option.applepay{grid-column:1/-1}
+.pay-card.applepay-card{background:#000;border-color:#222;height:48px}
+.pay-option input:checked + .applepay-card{border-color:var(--gold)}
+.checkout-btn{width:100%;padding:13px;background:var(--gold);color:#fff;
+  border:none;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;
+  transition:all .2s;font-family:'Cairo',sans-serif}
+.checkout-btn:hover{background:var(--gold-dark);transform:translateY(-1px)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .topbar-inner{padding:0 20px}
+  .header-inner{padding:0 20px;gap:12px}
+  .hero-content{padding:0 24px;max-width:100%}
+  .container{padding:0 22px}
+  .story{padding:60px 0}
+  .story-inner{grid-template-columns:1fr;gap:32px}
+  .story-img{aspect-ratio:16/9}
+  .cat-bar{padding:0 22px}
+  .cat-bar-wrap{top:38px}
+  .products-section{padding:44px 0}
+  .nova-section{padding:60px 0}
+  footer{padding:48px 0 22px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:26px}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center}
+  nav{display:none}
+  .cart-drawer{width:100vw;right:-100vw}
+  [dir=rtl] .cart-drawer{left:-100vw}
+  .cart-drawer.open{right:0}
+  [dir=rtl] .cart-drawer.open{left:0}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left">Remsees Foods &times; <span>Clenso</span></div>
+    <div class="topbar-right">
+      <button onclick="toggleLang()" id="langLabel">AR</button>
+      <button class="cart-btn-top" onclick="openCart()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span data-i18n="nav_cart">Cart</span>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo"><img src="logo/Asset 1.png" alt="Clenso"/></div>
+    <nav>
+      <div class="nav-item">
+        <button class="nav-link" onclick="scrollToCategory('bahib')">
+          <span data-i18n="nav_tea">Tea</span><span class="arrow">&#9660;</span>
+        </button>
+        <div class="dropdown">
+          <a href="#" onclick="switchCategory('bahib');return false" data-i18n="nav_bahib">Bahib Al Shay</a>
+          <a href="#" onclick="switchCategory('fruits');return false" data-i18n="nav_fruits">Fruit Infusions</a>
+          <a href="#" onclick="switchCategory('karak');return false" data-i18n="nav_karak">Karak</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button class="nav-link" onclick="scrollToCategory('coffee')">
+          <span data-i18n="nav_coffee">Coffee</span><span class="arrow">&#9660;</span>
+        </button>
+        <div class="dropdown">
+          <a href="#" onclick="switchCategory('coffee');return false" data-i18n="nav_coffee_all">All Coffee</a>
+        </div>
+      </div>
+      <a class="nav-link" href="#nova-section" data-i18n="nav_nova">La Nova Chocolate</a>
+      <a class="nav-link" href="#story" data-i18n="nav_story">Our Story</a>
+    </nav>
+    <a href="#products" class="btn-cta" data-i18n="nav_shop">Shop Now</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="slides-wrapper" id="slidesWrapper"></div>
+  <div class="hero-content">
+    <div class="hero-tag" data-i18n="hero_label">Remsees Foods x Clenso</div>
+    <h1 class="hero-title" data-i18n-html="hero_title">Where the<br/><em>Story</em><br/>Begins</h1>
+    <p class="hero-sub" data-i18n="hero_sub">Clenso is not just a drink. It is an experience told cup by cup, from the world's finest farms to your hands.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary" data-i18n="hero_btn1">Explore Collection</a>
+      <a href="#story" class="btn-outline" data-i18n="hero_btn2">Our Story</a>
+    </div>
+  </div>
+  <div class="slide-dots" id="slideDots"></div>
+</div>
+
+<!-- STORY -->
+<section class="story" id="story">
+  <div class="container">
+    <div class="story-inner">
+      <div class="story-img">
+        <img src="posters/ChatGPT Image May 6, 2026 at 02_27_08 PM.png" alt="Clenso"/>
+        <div class="story-img-badge" data-i18n-html="story_badge">By Remsees<br/>Foods</div>
+      </div>
+      <div class="story-text">
+        <p class="sec-tag" data-i18n="story_label">The Clenso Story</p>
+        <h2 class="sec-title" data-i18n-html="story_title">Every Cup<br/><em style="color:var(--gold);font-style:normal">Tells a Tale</em></h2>
+        <div class="divider"></div>
+        <p data-i18n-html="story_p1">In a world that never stops running, someone decided to pause — <strong>to taste life slowly</strong>.</p>
+        <p data-i18n-html="story_p2"><strong>Clenso</strong> was born from the heart of <strong>Remsees Foods</strong>; a company that believed a great drink is not a luxury — it is a right for every soul that deserves a beautiful moment.</p>
+        <p data-i18n-html="story_p3">We selected the finest leaves from the world's highlands, blended them with obsessive care, and added <strong>the spirit of the place</strong>. Every Clenso box is a message: you deserve better than an ordinary morning.</p>
+        <div class="stats">
+          <div class="stat"><span class="stat-num">+30</span><span class="stat-lbl" data-i18n="stat1">PRODUCTS</span></div>
+          <div class="stat"><span class="stat-num">4</span><span class="stat-lbl" data-i18n="stat2">COLLECTIONS</span></div>
+          <div class="stat"><span class="stat-num">100%</span><span class="stat-lbl" data-i18n="stat3">QUALITY</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORY BAR -->
+<div class="cat-bar-wrap" id="catBar">
+  <div class="cat-bar">
+    <button class="cat-tab active" data-cat="all"    onclick="switchCategory('all')"    data-i18n="cat_all">All Products</button>
+    <button class="cat-tab"        data-cat="bahib"  onclick="switchCategory('bahib')"  data-i18n="cat_bahib">Bahib Al Shay</button>
+    <button class="cat-tab"        data-cat="fruits" onclick="switchCategory('fruits')" data-i18n="cat_fruits">Fruit Infusions</button>
+    <button class="cat-tab"        data-cat="karak"  onclick="switchCategory('karak')"  data-i18n="cat_karak">Karak</button>
+    <button class="cat-tab"        data-cat="coffee" onclick="switchCategory('coffee')" data-i18n="cat_coffee">Coffee</button>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="container">
+    <div class="products-header">
+      <div>
+        <p class="sec-tag" data-i18n="products_label">Clenso Collection</p>
+        <h2 class="sec-title" id="catTitle">All Products</h2>
+      </div>
+      <p style="color:var(--muted);font-size:13px;font-weight:500" data-i18n="products_sub">Premium pricing for the Saudi market</p>
+    </div>
+    <div id="productsGrid" class="products-grid"></div>
+  </div>
+</section>
+
+<!-- LA NOVA -->
+<section class="nova-section" id="nova-section">
+  <div class="container">
+    <p class="nova-label" data-i18n="nova_label">Special Edition</p>
+    <img src="logo/lanova_logo_extracted.png" alt="La Nova"
+         style="height:72px;width:auto;margin:0 auto 20px;display:block;object-fit:contain"/>
+    <h2 class="nova-title" data-i18n-html="nova_title">La Nova<br/><em>Chocolate</em></h2>
+    <p class="nova-sub" data-i18n="nova_sub">The hot chocolate you cannot resist. Crafted for those who seek warmth in every sip — drama in every cup.</p>
+    <div class="nova-grid" id="novaGrid"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="logo/Asset 1.png" alt="Clenso" class="footer-logo-img"/>
+        <p data-i18n="footer_desc">Tea, coffee and spice products by Remsees Foods — because beautiful moments deserve the finest drink.</p>
+        <img src="logo/Ramsees-food logo .pdf" alt="Remsees Foods"
+             style="height:28px;width:auto;margin-bottom:16px;object-fit:contain;opacity:.5;filter:brightness(0) invert(1)"
+             onerror="this.style.display='none'"/>
+        <div class="footer-social">
+          <a href="#" class="social-btn" aria-label="Instagram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="TikTok">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="WhatsApp">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_products">Products</h4>
+        <a href="#" onclick="switchCategory('bahib');return false" data-i18n="cat_bahib">Bahib Al Shay</a>
+        <a href="#" onclick="switchCategory('fruits');return false" data-i18n="cat_fruits">Fruit Infusions</a>
+        <a href="#" onclick="switchCategory('karak');return false" data-i18n="cat_karak">Karak</a>
+        <a href="#" onclick="switchCategory('coffee');return false" data-i18n="cat_coffee">Coffee</a>
+        <a href="#nova-section" data-i18n="nav_nova">La Nova Chocolate</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_company">Company</h4>
+        <a href="#story" data-i18n="footer_story">Our Story</a>
+        <a href="#" data-i18n="footer_remsees">Remsees Foods</a>
+        <a href="#" data-i18n="footer_blog">Blog</a>
+        <a href="#" data-i18n="footer_jobs">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_contact">Contact</h4>
+        <a href="#" data-i18n="footer_whatsapp">WhatsApp</a>
+        <a href="#" data-i18n="footer_instagram">Instagram</a>
+        <a href="#" data-i18n="footer_email">Email</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n-html="footer_copy">&#169; 2026 <span>Clenso</span> &#8212; Remsees Foods. All rights reserved.</p>
+      <p data-i18n-html="footer_made">Made with <span>&#9829;</span> for the Saudi market</p>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3 data-i18n="cart_title">Your Cart</h3>
+    <button class="cart-close" onclick="closeCart()">&#215;</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </div>
+      <p data-i18n="cart_empty">Your cart is empty.<br/>Add a product to get started.</p>
+    </div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-summary">
+      <div class="cart-summary-row">
+        <span data-i18n="cart_subtotal">Subtotal</span><span id="cartSubtotal">0 SAR</span>
+      </div>
+      <div class="cart-summary-row">
+        <span data-i18n="cart_shipping">Shipping</span><span data-i18n="cart_free">Free</span>
+      </div>
+      <div class="cart-summary-row total">
+        <span data-i18n="cart_total">Total</span><span id="cartTotal">0 SAR</span>
+      </div>
+    </div>
+    <div class="payment-section">
+      <p class="payment-title" data-i18n="pay_title">Payment Method</p>
+      <div class="payment-grid">
+        <label class="pay-option applepay">
+          <input type="radio" name="payment" value="applepay" checked/>
+          <div class="pay-card applepay-card">
+            <svg width="46" height="20" viewBox="0 0 46 20" fill="white"><path d="M8.86 3.72c.52-.62.87-1.47.78-2.33-.75.04-1.67.5-2.2 1.12-.48.55-.9 1.43-.79 2.27.84.07 1.68-.39 2.21-1.06zm.77 1.23c-1.22-.07-2.26.69-2.84.69-.59 0-1.49-.65-2.47-.64C2.9 5.02 1.6 5.92.94 7.27c-1.32 2.27-.34 5.64.93 7.49.63.92 1.38 1.93 2.37 1.9.94-.04 1.3-.61 2.44-.61 1.14 0 1.46.61 2.47.59 1.03-.02 1.67-.92 2.3-1.84.72-1.05.99-2.07 1-2.12-.02-.02-1.93-.75-1.95-2.96-.02-1.85 1.51-2.74 1.58-2.79-.87-1.27-2.21-1.41-2.45-1.43zm8.12-2.84v13.71h2.13V11.6h2.96c2.7 0 4.59-1.85 4.59-4.55 0-2.7-1.86-4.54-4.53-4.54h-5.15zm2.13 1.8h2.47c1.85 0 2.9 1 2.9 2.75 0 1.76-1.05 2.76-2.91 2.76h-2.46V3.91zm10.05 9.37c0-1.82 1.4-2.97 3.87-3.1l2.86-.17V9.3c0-1.19-.8-1.86-2.15-1.86-1.27 0-2.06.62-2.26 1.57h-1.96c.12-1.87 1.7-3.25 4.29-3.25 2.51 0 4.12 1.33 4.12 3.44v7.22h-1.97v-1.72h-.05c-.58 1.17-1.86 1.91-3.17 1.91-1.98 0-3.58-1.22-3.58-3.33zm6.73-.94v-.72l-2.57.17c-1.31.08-2.05.65-2.05 1.57 0 .94.76 1.53 1.92 1.53 1.5 0 2.7-.97 2.7-2.55zm5.04 7.9V5.93h2.02v1.72h.05c.57-1.15 1.73-1.91 3.1-1.91 2.55 0 4.2 2.01 4.2 5.05 0 3.05-1.66 5.07-4.23 5.07-1.33 0-2.46-.7-3.04-1.85h-.04v5.23h-2.06zm5.6-10.39c-1.6 0-2.62 1.28-2.62 3.23 0 1.96 1.02 3.24 2.62 3.24 1.62 0 2.62-1.26 2.62-3.24 0-1.97-1-3.23-2.62-3.23z"/></svg>
+          </div>
+        </label>
+        <label class="pay-option">
+          <input type="radio" name="payment" value="visa"/>
+          <div class="pay-card">
+            <svg width="50" height="16" viewBox="0 0 50 16" fill="none"><path d="M20.55 15.2h-3.84L19 .8h3.84L20.55 15.2zM34.12.8l-3.59 9.47-.42-2.15-1.26-6.43S28.7.8 27.3.8h-5.87l-.07.25s1.8.37 3.9 1.63l3.23 12.52h3.97L38.19.8h-4.07zM43.5 15.2h3.5L44.1.8H40.8c-1.17 0-1.45.9-1.45.9L33.7 15.2h3.97l.79-2.19h4.84l.2 2.19zm-4.17-5.22l2-5.5.71 5.5h-2.71zM14.1 1.98L13.54 5s-1.68-.43-3.4-.43c-1.87 0-2.74.78-2.74 1.54 0 1.65 2.86 2.1 2.86 5 0 3.42-3.14 4.28-5.53 4.28C2.9 15.4.8 14.5.8 14.5l.58-3.14s1.86.82 3.2.82 2.14-.47 2.14-1.42c0-2.05-2.86-2.1-2.86-4.8 0-3.45 3.2-4.88 5.25-4.88C10.87.8 14.1 1.98 14.1 1.98z" fill="#1A1F71"/><path d="M30.11 8.12l-1.26-6.43S28.7.8 27.3.8h-5.87l-.07.25s2.78.58 5.46 2.73c2.55 2.07 3.29 4.34 3.29 4.34z" fill="#F9A533"/></svg>
+          </div>
+        </label>
+        <label class="pay-option">
+          <input type="radio" name="payment" value="mastercard"/>
+          <div class="pay-card">
+            <svg width="36" height="24" viewBox="0 0 36 24" fill="none"><rect width="36" height="24" rx="4" fill="#F5F5F5"/><circle cx="14" cy="12" r="7" fill="#EB001B"/><circle cx="22" cy="12" r="7" fill="#F79E1B"/><path d="M18 7.04A7 7 0 0 1 21 12a7 7 0 0 1-3 4.96A7 7 0 0 1 15 12a7 7 0 0 1 3-4.96z" fill="#FF5F00"/></svg>
+          </div>
+        </label>
+        <label class="pay-option">
+          <input type="radio" name="payment" value="mada"/>
+          <div class="pay-card">
+            <svg width="54" height="20" viewBox="0 0 54 20" fill="none"><rect width="54" height="20" rx="4" fill="#0B7D3E"/><text x="6" y="14" font-family="Arial" font-weight="700" font-size="11" fill="white" letter-spacing="1">mada</text></svg>
+          </div>
+        </label>
+      </div>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" data-i18n="checkout_btn">Place Order</button>
+  </div>
+</div>
+
+<script>
+const i18n = {
+  en:{
+    nav_tea:'Tea',nav_bahib:'Bahib Al Shay',nav_fruits:'Fruit Infusions',
+    nav_karak:'Karak',nav_coffee:'Coffee',nav_coffee_all:'All Coffee',
+    nav_nova:'La Nova Chocolate',nav_story:'Our Story',
+    nav_shop:'Shop Now',nav_cart:'Cart',
+    hero_label:'Remsees Foods x Clenso',
+    hero_title:'Where the<br/><em>Story</em><br/>Begins',
+    hero_sub:'Clenso is not just a drink. It is an experience told cup by cup, from the world\'s finest farms to your hands.',
+    hero_btn1:'Explore Collection',hero_btn2:'Our Story',
+    story_badge:'By Remsees<br/>Foods',
+    story_label:'The Clenso Story',
+    story_title:'Every Cup<br/><em style="color:var(--gold);font-style:normal">Tells a Tale</em>',
+    story_p1:'In a world that never stops running, someone decided to pause &#8212; <strong>to taste life slowly</strong>.',
+    story_p2:'<strong>Clenso</strong> was born from the heart of <strong>Remsees Foods</strong>; a company that believed a great drink is not a luxury &#8212; it is a right for every soul that deserves a beautiful moment.',
+    story_p3:'We selected the finest leaves from the world\'s highlands, blended them with obsessive care, and added <strong>the spirit of the place</strong>. Every Clenso box is a message: you deserve better than an ordinary morning.',
+    stat1:'PRODUCTS',stat2:'COLLECTIONS',stat3:'QUALITY',
+    cat_all:'All Products',cat_bahib:'Bahib Al Shay',
+    cat_fruits:'Fruit Infusions',cat_karak:'Karak',cat_coffee:'Coffee',
+    products_label:'Clenso Collection',products_sub:'Premium pricing for the Saudi market',
+    currency:'SAR',
+    nova_label:'Special Edition',
+    nova_title:'La Nova<br/><em>Chocolate</em>',
+    nova_sub:'The hot chocolate you cannot resist. Crafted for those who seek warmth in every sip &#8212; drama in every cup.',
+    nova_cat:'La Nova Chocolate',
+    footer_desc:'Tea, coffee and spice products by Remsees Foods &#8212; because beautiful moments deserve the finest drink.',
+    footer_products:'Products',footer_company:'Company',footer_contact:'Contact',
+    footer_story:'Our Story',footer_remsees:'Remsees Foods',
+    footer_blog:'Blog',footer_jobs:'Careers',
+    footer_whatsapp:'WhatsApp',footer_instagram:'Instagram',footer_email:'Email',
+    footer_copy:'&#169; 2026 <span>Clenso</span> &#8212; Remsees Foods. All rights reserved.',
+    footer_made:'Made with <span>&#9829;</span> for the Saudi market',
+    badge_bestseller:'Best Seller',badge_limited:'Limited',
+    badge_premium:'Premium',badge_editors:"Editor's Choice",
+    badge_loved:'Most Loved',badge_special:'Special Edition',
+    cart_title:'Your Cart',cart_empty:'Your cart is empty.<br/>Add a product to get started.',
+    cart_subtotal:'Subtotal',cart_shipping:'Shipping',cart_free:'Free',
+    cart_total:'Total',pay_title:'Payment Method',
+    checkout_btn:'Place Order',toast_added:'added to cart',cart_remove:'Remove',
+  },
+  ar:{
+    nav_tea:'الشاي',nav_bahib:'بحب الشاي',nav_fruits:'انفوزيون فواكه',
+    nav_karak:'الكرك',nav_coffee:'القهوة',nav_coffee_all:'كل القهوة',
+    nav_nova:'لا نوفا شوكليت',nav_story:'قصتنا',
+    nav_shop:'تسوق الآن',nav_cart:'السلة',
+    hero_label:'رمسيس فودز x كلينزو',
+    hero_title:'حيث تبدأ<br/><em>الرواية</em><br/>بأول رشفة',
+    hero_sub:'كلينزو ليس مجرد مشروب. إنه تجربة تحكيها كأس لكأس، من مزارع العالم إلى يديك.',
+    hero_btn1:'اكتشف المجموعة',hero_btn2:'قصتنا',
+    story_badge:'من رمسيس<br/>فودز',
+    story_label:'قصة كلينزو',
+    story_title:'كل كوب<br/><em style="color:var(--gold);font-style:normal">يروي حكاية</em>',
+    story_p1:'في عالم يركض ولا يتوقف، قرر أحدهم أن يتوقف لحظة &#8212; <strong>ليذوق الحياة بتأنٍّ</strong>.',
+    story_p2:'وُلدت <strong>كلينزو</strong> من رحم شركة <strong>رمسيس فودز</strong>؛ الشركة التي آمنت بأن المشروب الجيد ليس ترفاً &#8212; بل حق لكل روح تستحق اللحظة الجميلة.',
+    story_p3:'انتقينا أجود الأوراق من مرتفعات العالم، مزجناها بعناية مجنونة، وأضفنا إليها <strong>روح المكان</strong>. كل علبة كلينزو رسالة: أنت تستحق أفضل من هذا الصباح الرتيب.',
+    stat1:'منتج',stat2:'مجموعات',stat3:'جودة',
+    cat_all:'كل المنتجات',cat_bahib:'بحب الشاي',
+    cat_fruits:'انفوزيون فواكه',cat_karak:'الكرك',cat_coffee:'القهوة',
+    products_label:'مجموعة كلينزو',products_sub:'أسعار تناسب السوق السعودي الراقي',
+    currency:'ر.س',
+    nova_label:'إصدار خاص',
+    nova_title:'لا نوفا<br/><em>شوكليت</em>',
+    nova_sub:'مشروب الشوكولاتة الذي لا تقاومه. صُنع لمن يبحث عن الدفء في كل رشفة &#8212; دراما في كل كوب.',
+    nova_cat:'لا نوفا شوكليت',
+    footer_desc:'منتجات الشاي والقهوة والبهارات من رمسيس فودز &#8212; لأن اللحظة الجميلة تستحق المشروب الأجمل.',
+    footer_products:'المنتجات',footer_company:'الشركة',footer_contact:'التواصل',
+    footer_story:'قصتنا',footer_remsees:'رمسيس فودز',
+    footer_blog:'المدونة',footer_jobs:'وظائف',
+    footer_whatsapp:'واتساب',footer_instagram:'انستقرام',footer_email:'البريد الإلكتروني',
+    footer_copy:'&#169; 2026 <span>كلينزو</span> &#8212; رمسيس فودز. جميع الحقوق محفوظة.',
+    footer_made:'صنع بـ <span>&#9829;</span> للسوق السعودي',
+    badge_bestseller:'الأكثر مبيعاً',badge_limited:'محدود',
+    badge_premium:'بريميوم',badge_editors:'اختيار المحررين',
+    badge_loved:'الأكثر حباً',badge_special:'طبعة خاصة',
+    cart_title:'سلتك',cart_empty:'سلتك فارغة.<br/>أضف منتجاً للبدء.',
+    cart_subtotal:'المجموع الفرعي',cart_shipping:'الشحن',cart_free:'مجاني',
+    cart_total:'الإجمالي',pay_title:'طريقة الدفع',
+    checkout_btn:'إتمام الطلب',toast_added:'أُضيف إلى السلة',cart_remove:'حذف',
+  }
+};
+
+const products = [
+  {id:1,cat:'bahib',en:{name:'English Breakfast Tea',sub:'20 Tea Bags',desc:'A full-bodied, rich-aroma blend crafted for those who begin their morning with intention. Bold, smooth, and unmistakably classic.',tags:['Rich Aroma','Full Bodied','20 Bags']},ar:{name:'شاي الإفطار الإنجليزي',sub:'20 كيس شاي',desc:'مزيج غني وقوي للذي يبدأ صباحه بنية. جريء وناعم وكلاسيكي بلا منازع.',tags:['أريج غني','جسم قوي','20 كيس']},price:45,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_19 PM.png',featured:true},
+  {id:2,cat:'bahib',en:{name:'Earl Grey Tea',sub:'20 Tea Bags',desc:'The timeless bergamot-infused classic. Citrus notes that drift through the steam and settle the mind with every sip.',tags:['Rich Aroma','Citrus Notes','20 Bags']},ar:{name:'شاي إيرل غراي',sub:'20 كيس شاي',desc:'الكلاسيكي الخالد بنكهة البرغموت. عبير حمضي يتصاعد مع البخار ويهدئ العقل.',tags:['أريج غني','نكهة حمضية','20 كيس']},price:48,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_27 PM.png'},
+  {id:3,cat:'bahib',en:{name:'Green Tea',sub:'20 Tea Bags',desc:'Pure and smooth — a clean cup of clarity. Refreshing from the first sip, grounding to the very last.',tags:['Pure & Smooth','Refreshing Taste','20 Bags']},ar:{name:'الشاي الأخضر',sub:'20 كيس شاي',desc:'نقي وناعم — كوب صافٍ من الوضوح. منعش من أول رشفة ومُرسِّخ حتى الأخيرة.',tags:['نقي وناعم','طعم منعش','20 كيس']},price:45,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_29 PM.png'},
+  {id:4,cat:'bahib',en:{name:'Jasmine Green Tea',sub:'20 Tea Bags',desc:'Where green tea meets jasmine blossom. A floral, delicate blend that transforms any moment into ceremony.',tags:['Floral Aroma','Delicate Blend','20 Bags']},ar:{name:'شاي الياسمين الأخضر',sub:'20 كيس شاي',desc:'حيث يلتقي الشاي الأخضر بزهرة الياسمين. مزيج زهري رقيق يحوّل كل لحظة إلى طقس.',tags:['عبير زهري','مزيج رقيق','20 كيس']},price:52,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_31 PM.png'},
+  {id:5,cat:'bahib',en:{name:'Pure Ceylon Tea',sub:'20 Tea Bags',desc:'Bold character from the highlands of Sri Lanka. A rich, full-bodied cup with deep aroma and commanding presence.',tags:['Rich Aroma','Bold Character','20 Bags']},ar:{name:'شاي سيلاني خالص',sub:'20 كيس شاي',desc:'شخصية جريئة من مرتفعات سريلانكا. كوب غني وقوي بأريج عميق وحضور لا يُنكر.',tags:['أريج غني','طابع جريء','20 كيس']},price:50,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_34 PM.png'},
+  {id:6,cat:'bahib',en:{name:'English Breakfast Tea',sub:'Sachet — 20 Bags',desc:'The same rich morning blend in individual sachets. Fresh, convenient, and ready whenever you need it most.',tags:['Rich Aroma','Individual Sachets']},ar:{name:'شاي الإفطار الإنجليزي',sub:'أكياس فردية — 20 كيس',desc:'نفس المزيج الصباحي الغني في أكياس فردية. طازج ومريح وجاهز عند الحاجة.',tags:['أريج غني','أكياس فردية']},price:45,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_19_17 PM.png'},
+  {id:7,cat:'bahib',en:{name:'Earl Grey Tea',sub:'Sachet — Individual Bags',desc:'Bergamot-kissed elegance in a single sachet. Citrus notes, rich aroma, ready on demand.',tags:['Citrus Notes','Individual Sachets']},ar:{name:'شاي إيرل غراي',sub:'أكياس فردية',desc:'أناقة البرغموت في كيس واحد. نكهة حمضية وأريج غني جاهز عند الطلب.',tags:['نكهة حمضية','أكياس فردية']},price:48,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_21_21 PM.png'},
+  {id:8,cat:'bahib',en:{name:'Green Tea',sub:'Sachet — Refreshing Taste',desc:'Pure, smooth green tea in an individual sachet. Clean taste, clear mind, anytime anywhere.',tags:['Refreshing Taste','Individual Sachets']},ar:{name:'الشاي الأخضر',sub:'أكياس فردية — طعم منعش',desc:'شاي أخضر نقي وناعم في كيس فردي. طعم صافٍ وذهن صافٍ في أي وقت.',tags:['طعم منعش','أكياس فردية']},price:45,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_21_25 PM.png'},
+  {id:9,cat:'bahib',en:{name:'Jasmine Green Tea',sub:'Sachet — Floral Aroma',desc:'Jasmine-scented green tea in a single sachet. Delicate, floral, and deeply calming.',tags:['Floral Aroma','Individual Sachets']},ar:{name:'شاي الياسمين الأخضر',sub:'أكياس فردية — عبير زهري',desc:'شاي أخضر بعبير الياسمين في كيس فردي. رقيق وزهري وهادئ في العمق.',tags:['عبير زهري','أكياس فردية']},price:52,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_21_27 PM.png'},
+  {id:10,cat:'bahib',en:{name:'Pure Ceylon Tea',sub:'Sachet — Bold Character',desc:'The bold Ceylon experience in an individual sachet. Same rich character, ultimate convenience.',tags:['Bold Character','Individual Sachets']},ar:{name:'شاي سيلاني خالص',sub:'أكياس فردية — طابع جريء',desc:'تجربة السيلان الجريئة في كيس فردي. نفس الطابع الغني مع أقصى درجات الراحة.',tags:['طابع جريء','أكياس فردية']},price:50,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_21_30 PM.png'},
+  {id:11,cat:'fruits',en:{name:'Peach & Passion Fruit',sub:'20 Tea Bags · Fruit Infusion',desc:'Sun-ripened peach and exotic passion fruit. A naturally fruity, refreshing blend that turns ordinary afternoons extraordinary.',tags:['Naturally Fruity','Refreshing Blend','20 Bags']},ar:{name:'الخوخ وفاكهة العاطفة',sub:'20 كيس · انفوزيون فواكه',desc:'خوخ ناضج وفاكهة عاطفة غريبة. مزيج منعش طبيعي يجعل بعد الظهر العادي استثنائياً.',tags:['فواكه طبيعية','مزيج منعش','20 كيس']},price:55,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_24 PM.png'},
+  {id:12,cat:'fruits',en:{name:'Strawberry & Raspberry',sub:'20 Tea Bags · Fruit Infusion',desc:'Two berries, one breathtaking cup. A vibrant, naturally fruity berry blend that is endlessly satisfying.',tags:['Naturally Fruity','Berry Blend','20 Bags']},ar:{name:'الفراولة والتوت',sub:'20 كيس · انفوزيون فواكه',desc:'توتان، كوب واحد مذهل. مزيج توت حيوي وطبيعي يُشبع دائماً.',tags:['فواكه طبيعية','مزيج توت','20 كيس']},price:55,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_36 PM.png'},
+  {id:13,cat:'fruits',en:{name:'Mixed Berries',sub:'20 Tea Bags · Fruit Infusion',desc:'Blackberries, blueberries, and redcurrants blended into one naturally vibrant infusion. Deep, rich, and beautifully complex.',tags:['Naturally Fruity','Berry Burst','20 Bags']},ar:{name:'مزيج التوت',sub:'20 كيس · انفوزيون فواكه',desc:'توت أسود وأزرق وكشمش أحمر في انفوزيون واحد حيوي. عميق وغني ومعقد بجمال.',tags:['فواكه طبيعية','انفجار توت','20 كيس']},price:58,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_38 PM.png'},
+  {id:14,cat:'fruits',en:{name:'Lemon & Ginger',sub:'20 Tea Bags · Fruit Infusion',desc:'Zesty lemon meets warming ginger. An invigorating blend that ignites the senses and clears the mind from the very first sip.',tags:['Naturally Fruity','Zesty Blend','20 Bags']},ar:{name:'الليمون والزنجبيل',sub:'20 كيس · انفوزيون فواكه',desc:'الليمون الحيوي يلتقي بالزنجبيل الدافئ. مزيج منعش يشعل الحواس ويصفي الذهن.',tags:['فواكه طبيعية','مزيج حيوي','20 كيس']},price:52,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_40 PM.png'},
+  {id:15,cat:'fruits',en:{name:'Apple & Cinnamon',sub:'20 Tea Bags · Fruit Infusion',desc:'Crisp apple and warm cinnamon in a naturally fruity, spiced blend that wraps you in comfort with every sip.',tags:['Naturally Fruity','Spiced Blend','20 Bags']},ar:{name:'التفاح والقرفة',sub:'20 كيس · انفوزيون فواكه',desc:'تفاح طازج وقرفة دافئة في مزيج متبل طبيعي يلفّك بالراحة مع كل رشفة.',tags:['فواكه طبيعية','مزيج متبل','20 كيس']},price:55,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_16_43 PM.png'},
+  {id:16,cat:'fruits',en:{name:'Peach & Passion Fruit',sub:'Sachet · Refreshing Blend',desc:'Peach and passion fruit in a fresh individual sachet. Same extraordinary taste, ultimate convenience.',tags:['Refreshing Blend','Individual Sachets']},ar:{name:'الخوخ وفاكهة العاطفة',sub:'أكياس فردية · مزيج منعش',desc:'خوخ وفاكهة العاطفة في كيس فردي طازج. نفس الطعم الاستثنائي بأقصى راحة.',tags:['مزيج منعش','أكياس فردية']},price:55,img:'products/TEA/ChatGPT Image May 6, 2026 at 02_21_32 PM.png'},
+  {id:17,cat:'karak',en:{name:'Clenso Karak',sub:'Premium Instant Karak · Tin · 300g · 15 Servings',desc:'Rich tradition. Modern indulgence. A smooth, creamy karak crafted from premium tea, cardamom, and spices — the authentic Gulf experience, instantly.',tags:['Premium Tea','Smooth & Creamy','Authentic Taste']},ar:{name:'كلينزو كرك',sub:'كرك فوري فاخر · علبة · 300 جم · 15 حصة',desc:'تراث غني. متعة عصرية. كرك ناعم وكريمي مصنوع من الشاي الفاخر والهيل والبهارات — تجربة الخليج الأصيلة فورياً.',tags:['شاي فاخر','ناعم وكريمي','طعم أصيل']},price:68,img:'products/TEA/ChatGPT Image May 7, 2026 at 02_38_50 PM.png',featured:true,badge:'bestseller'},
+  {id:18,cat:'karak',en:{name:'Clenso Karak',sub:'Premium Sachets · 10 Sachets · 150g',desc:'The authentic karak experience in premium individual sticks. Fresh anytime, anywhere — the Gulf in your pocket.',tags:['Premium Tea','Individual Sticks','10 Sachets']},ar:{name:'كلينزو كرك',sub:'أكياس فاخرة · 10 أكياس · 150 جم',desc:'تجربة الكرك الأصيلة في عصي فردية فاخرة. طازج في أي وقت وأي مكان.',tags:['شاي فاخر','عصي فردية','10 أكياس']},price:58,img:'products/TEA/ChatGPT Image May 7, 2026 at 02_41_53 PM.png'},
+  {id:19,cat:'coffee',en:{name:'Signature Blend',sub:'Specialty Coffee · Whole Bean · 250g',desc:'Crafted by nature, perfected by passion. Notes of dark chocolate, caramel, and vanilla — our definitive whole-bean expression.',tags:['100% Arabica','Specialty Coffee','Whole Bean']},ar:{name:'المزيج المميز',sub:'قهوة متخصصة · حبوب كاملة · 250 جم',desc:'صُنع بالطبيعة، أُتقن بالشغف. نكهات الشوكولاتة الداكنة والكراميل والفانيلا.',tags:['100% أرابيكا','قهوة متخصصة','حبوب كاملة']},price:95,img:'products/COFFEE/ChatGPT Image May 6, 2026 at 01_45_06 PM (1).png',featured:true},
+  {id:20,cat:'coffee',en:{name:'Premium Espresso Blend',sub:'Dark Roast · 100% Arabica',desc:'Crafted for true coffee lovers. Every bean, every roast, every moment. A dark roast of smooth, rich aroma — ethically sourced.',tags:['100% Arabica','Dark Roast','Ethically Sourced']},ar:{name:'مزيج الإسبريسو الفاخر',sub:'تحميص داكن · 100% أرابيكا',desc:'صُنع لعشاق القهوة الحقيقيين. كل حبة، كل تحميص، كل لحظة. أريج غني وناعم.',tags:['100% أرابيكا','تحميص داكن','مصدر أخلاقي']},price:88,img:'products/COFFEE/ChatGPT Image May 6, 2026 at 01_45_06 PM (4).png',badge:'premium'},
+  {id:21,cat:'coffee',en:{name:'Signature Espresso Capsules',sub:'Premium Coffee Capsules · 10 Capsules',desc:'Rich. Smooth. Intense. Our signature espresso in perfectly portioned capsules — a cafe-quality shot at home.',tags:['Rich','Smooth','Intense','10 Capsules']},ar:{name:'كبسولات إسبريسو مميزة',sub:'كبسولات قهوة فاخرة · 10 كبسولات',desc:'غني. ناعم. كثيف. إسبريسونا المميز في كبسولات مقسّمة بدقة — جرعة مقهى في المنزل.',tags:['غني','ناعم','كثيف','10 كبسولات']},price:72,img:'products/COFFEE/ChatGPT Image May 6, 2026 at 02_02_31 PM (1).png'},
+  {id:22,cat:'coffee',en:{name:'Gold Freeze Dried',sub:'Premium Instant Coffee · 100g',desc:'Smooth aroma, premium taste — our gold-standard instant coffee crafted for the discerning palate who refuses to compromise.',tags:['Smooth Aroma','Premium Instant','100g']},ar:{name:'الذهبي الفريزدراي',sub:'قهوة فورية فاخرة · 100 جم',desc:'أريج ناعم وطعم فاخر — قهوتنا الفورية بالمعيار الذهبي للذواقة الذين يرفضون التنازل.',tags:['أريج ناعم','فوري فاخر','100 جم']},price:79,img:'products/COFFEE/ChatGPT Image May 6, 2026 at 02_02_50 PM.png'},
+  {id:23,cat:'coffee',en:{name:'Classic Instant Coffee',sub:'Classic Roast · 100g',desc:'Rich aroma. Smooth taste. The classic roast that never lets you down — consistent, comforting, and crafted for every moment.',tags:['Rich Aroma','Smooth Taste','Classic Roast']},ar:{name:'القهوة الفورية الكلاسيكية',sub:'تحميص كلاسيكي · 100 جم',desc:'أريج غني وطعم ناعم. التحميص الكلاسيكي الذي لا يخذلك أبداً — ثابت ومريح لكل لحظة.',tags:['أريج غني','طعم ناعم','تحميص كلاسيكي']},price:65,img:'products/COFFEE/ChatGPT Image May 6, 2026 at 02_07_02 PM.png'},
+  {id:24,cat:'coffee',en:{name:'Gold Freeze Dried',sub:'Premium Instant Coffee · Jar & Box · 100g',desc:'The complete Gold Freeze Dried experience in a premium jar with matching gift box. The finest instant coffee, beautifully presented.',tags:['Rich Aroma','Gift Ready','100g']},ar:{name:'الذهبي الفريزدراي',sub:'قهوة فورية فاخرة · جرة وعلبة · 100 جم',desc:'تجربة الذهبي الفريزدراي الكاملة في جرة فاخرة مع علبة هدية متطابقة. القهوة الفورية الأفضل.',tags:['أريج غني','جاهز للهدية','100 جم']},price:85,img:'products/COFFEE/ChatGPT Image May 6, 2026 at 02_07_08 PM.png'},
+];
+
+const novaProducts = [
+  {id:'n1',en:{name:'La Nova Dark Chocolate',sub:'Premium Hot Chocolate',desc:'The dark chocolate that admits life is complex — rich, slightly bitter, always thrilling. A cup that understands you.'},ar:{name:'لا نوفا داك شوكليت',sub:'شوكولاتة ساخنة فاخرة',desc:'الشوكولاتة الداكنة التي تعترف بأن الحياة معقدة — غنية ومريرة قليلاً ومثيرة دائماً.'},price:85,img:null},
+  {id:'n2',en:{name:'La Nova Milk Cream',sub:'Premium Hot Chocolate',desc:'Milk chocolate that takes you back to a childhood you did not live enough — warm, reassuring, and endlessly comforting.'},ar:{name:'لا نوفا ميلك كريم',sub:'شوكولاتة ساخنة فاخرة',desc:'شوكولاتة الحليب التي تعود بك إلى طفولة لم تعشها بما يكفي — دافئة ومطمئنة.'},price:79,img:null,badge:'loved'},
+  {id:'n3',en:{name:'La Nova Hot White',sub:'Premium Hot Chocolate',desc:'Hot white chocolate — a beautiful contradiction. Boundless sweetness, silky texture, an experience you cannot resist.'},ar:{name:'لا نوفا هوت وايت',sub:'شوكولاتة ساخنة فاخرة',desc:'الشوكولاتة البيضاء الساخنة — تناقض جميل. حلاوة بلا حدود وتجربة لا تُقاوَم.'},price:75,img:null},
+  {id:'n4',en:{name:'La Nova Sea Salt Caramel',sub:'Premium Hot Chocolate',desc:'Salt and sweetness in an eternal dance. When flavors contrast, unforgettable moments are born — this is that moment.'},ar:{name:'لا نوفا سيا سولت كراميل',sub:'شوكولاتة ساخنة فاخرة',desc:'الملح والحلاوة في رقصة أبدية. حين تتضاد الطعوم تولد اللحظات التي لا تُنسى.'},price:98,img:null,badge:'special'},
+];
+
+let currentLang='en';
+function toggleLang(){setLang(currentLang==='en'?'ar':'en')}
+function setLang(lang){
+  currentLang=lang;
+  const html=document.documentElement;
+  html.lang=lang; html.dir=lang==='ar'?'rtl':'ltr';
+  document.getElementById('langLabel').textContent=lang==='en'?'AR':'EN';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(i18n[lang][k]!==undefined) el.textContent=i18n[lang][k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const k=el.getAttribute('data-i18n-html');
+    if(i18n[lang][k]!==undefined) el.innerHTML=i18n[lang][k];
+  });
+  renderProducts(); renderNova(); updateCartUI();
+  document.getElementById('catTitle').textContent=getCatLabel(currentCat);
+}
+function t(k){return i18n[currentLang][k]||k}
+
+const posters=[
+  'ChatGPT Image May 6, 2026 at 01_45_22 PM.png',
+  'ChatGPT Image May 6, 2026 at 01_45_30 PM.png',
+  'ChatGPT Image May 6, 2026 at 01_48_36 PM (1).png',
+  'ChatGPT Image May 6, 2026 at 01_48_50 PM.png',
+  'ChatGPT Image May 6, 2026 at 01_50_39 PM (1).png',
+  'ChatGPT Image May 6, 2026 at 02_02_31 PM (3).png',
+  'ChatGPT Image May 7, 2026 at 02_54_55 PM.png',
+  'ChatGPT Image May 7, 2026 at 02_55_01 PM.png',
+  'ChatGPT Image May 7, 2026 at 02_55_08 PM.png',
+];
+let currentSlide=0;
+function initSlider(){
+  const w=document.getElementById('slidesWrapper'),d=document.getElementById('slideDots');
+  posters.forEach((p,i)=>{
+    const s=document.createElement('div');
+    s.className='slide'+(i===0?' active':'');
+    s.innerHTML=`<img src="posters/${p}" alt="Clenso" loading="${i===0?'eager':'lazy'}"/><div class="slide-overlay"></div>`;
+    w.appendChild(s);
+    const dot=document.createElement('div');
+    dot.className='dot'+(i===0?' active':'');
+    dot.onclick=()=>goSlide(i); d.appendChild(dot);
+  });
+  setInterval(()=>goSlide(currentSlide+1),4500);
+}
+function goSlide(n){
+  const sl=document.querySelectorAll('.slide'),dt=document.querySelectorAll('.dot');
+  sl[currentSlide].classList.remove('active'); dt[currentSlide].classList.remove('active');
+  currentSlide=(n+posters.length)%posters.length;
+  sl[currentSlide].classList.add('active'); dt[currentSlide].classList.add('active');
+}
+
+let currentCat='all';
+const catKeys={all:'cat_all',bahib:'cat_bahib',fruits:'cat_fruits',karak:'cat_karak',coffee:'cat_coffee'};
+function getCatLabel(cat){return t(catKeys[cat]||'cat_all')}
+function getBadge(k){return k?t('badge_'+k):''}
+
+function renderProducts(){
+  const grid=document.getElementById('productsGrid');
+  const list=currentCat==='all'?products:products.filter(p=>p.cat===currentCat);
+  grid.innerHTML=list.map(p=>productCard(p,false)).join('');
+}
+function productCard(p,isNova){
+  const d=p[currentLang];
+  const badge=p.badge?getBadge(p.badge):'';
+  const currency=t('currency');
+  const catLabel=isNova?t('nova_cat'):getCatLabel(p.cat);
+  const imgEl=p.img
+    ?`<img class="product-img" src="${p.img}" alt="${d.name}" loading="lazy"/>`
+    :`<div class="nova-placeholder"><svg class="nova-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg><span class="nova-placeholder-text">Coming Soon</span></div>`;
+  const tagsHtml=(d.tags||[]).map(tag=>`<span class="product-tag">${tag}</span>`).join('');
+  return `
+    <div class="product-card${isNova?' nova-card':''}">
+      ${badge?`<span class="product-badge">${badge}</span>`:''}
+      ${imgEl}
+      <div class="product-info">
+        <p class="product-cat${isNova?' nova-cat':''}">${catLabel}</p>
+        <h3 class="product-name">${d.name}</h3>
+        <p class="product-sub">${d.sub}</p>
+        <div class="product-tags">${tagsHtml}</div>
+        <p class="product-desc">${d.desc}</p>
+        <div class="product-footer">
+          <div class="product-price">${p.price}<span>${currency}</span></div>
+          <button class="add-btn${isNova?' nova-add':''}" onclick="addToCart(${JSON.stringify(p.id)})">+</button>
+        </div>
+      </div>
+    </div>`;
+}
+function renderNova(){
+  document.getElementById('novaGrid').innerHTML=novaProducts.map(p=>productCard(p,true)).join('');
+}
+function switchCategory(cat){
+  currentCat=cat;
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.toggle('active',t.dataset.cat===cat));
+  renderProducts();
+  document.getElementById('catTitle').textContent=getCatLabel(cat);
+  document.getElementById('products').scrollIntoView({behavior:'smooth'});
+}
+function scrollToCategory(cat){switchCategory(cat)}
+
+const cart={};
+const allProducts=[...products,...novaProducts];
+function addToCart(id){
+  const p=allProducts.find(x=>x.id==id);
+  if(!p)return;
+  if(cart[id]) cart[id].qty++; else cart[id]={p,qty:1};
+  updateCartUI(); openCart();
+  showToast(`"${p[currentLang].name}" ${t('toast_added')}`);
+}
+function changeQty(id,delta){
+  if(!cart[id])return;
+  cart[id].qty=Math.max(0,cart[id].qty+delta);
+  if(cart[id].qty===0) delete cart[id];
+  updateCartUI();
+}
+function removeItem(id){delete cart[id]; updateCartUI()}
+function getCount(){return Object.values(cart).reduce((s,i)=>s+i.qty,0)}
+function getTotal(){return Object.values(cart).reduce((s,i)=>s+i.p.price*i.qty,0)}
+function updateCartUI(){
+  const count=getCount(),total=getTotal(),cur=t('currency');
+  const badge=document.getElementById('cartBadge');
+  badge.textContent=count; badge.style.display=count>0?'flex':'none';
+  const isEmpty=count===0;
+  document.getElementById('cartEmpty').style.display=isEmpty?'block':'none';
+  document.getElementById('cartItems').style.display=isEmpty?'none':'block';
+  document.getElementById('cartFooter').style.display=isEmpty?'none':'block';
+  if(!isEmpty){
+    document.getElementById('cartSubtotal').textContent=`${total} ${cur}`;
+    document.getElementById('cartTotal').textContent=`${total} ${cur}`;
+    renderCartItems();
+  }
+}
+function renderCartItems(){
+  const el=document.getElementById('cartItems');
+  el.innerHTML=Object.values(cart).map(({p,qty})=>{
+    const d=p[currentLang];
+    const imgEl=p.img?`<img class="cart-item-img" src="${p.img}" alt="${d.name}"/>`
+      :`<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;background:var(--bg-section)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div>`;
+    return `
+      <div class="cart-item">
+        ${imgEl}
+        <div class="cart-item-info">
+          <p class="cart-item-name">${d.name}</p>
+          <p class="cart-item-sub">${d.sub}</p>
+          <div class="cart-item-row">
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(${JSON.stringify(p.id)},-1)">&#8722;</button>
+              <span class="qty-num">${qty}</span>
+              <button class="qty-btn" onclick="changeQty(${JSON.stringify(p.id)},1)">+</button>
+            </div>
+            <span class="cart-item-price">${p.price*qty} ${t('currency')}</span>
+          </div>
+          <button class="cart-remove" onclick="removeItem(${JSON.stringify(p.id)})">${t('cart_remove')}</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+function openCart(){
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCart(){
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function checkout(){
+  const method=document.querySelector('input[name="payment"]:checked')?.value||'';
+  showToast(currentLang==='en'?`Order placed via ${method.toUpperCase()}`:`تم الطلب عبر ${method.toUpperCase()}`);
+  closeCart();
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  updateCartUI();
+}
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2800);
+}
+initSlider(); renderProducts(); renderNova(); updateCartUI();
+</script>
+</body>
+</html>
