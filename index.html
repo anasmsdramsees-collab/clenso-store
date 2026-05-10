@@ -363,6 +363,7 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
         </button>
         <div class="dropdown">
           <a href="#" onclick="switchCategory('turkish');return false" data-i18n="nav_turkish">Turkish Coffee</a>
+          <a href="#" onclick="switchCategory('arabic');return false" data-i18n="nav_arabic">Arabic Coffee</a>
           <a href="#" onclick="switchCategory('espresso');return false" data-i18n="nav_espresso">Espresso</a>
           <a href="#" onclick="switchCategory('capsules');return false" data-i18n="nav_capsules">Capsules</a>
         </div>
@@ -424,6 +425,7 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
     <button class="cat-tab"        data-cat="karak"     onclick="switchCategory('karak')"     data-i18n="cat_karak">Karak</button>
     <button class="cat-tab"        data-cat="turkish"   onclick="switchCategory('turkish')"   data-i18n="cat_turkish">Turkish Coffee</button>
     <button class="cat-tab"        data-cat="espresso"  onclick="switchCategory('espresso')"  data-i18n="cat_espresso">Espresso</button>
+    <button class="cat-tab"        data-cat="arabic"    onclick="switchCategory('arabic')"    data-i18n="cat_arabic">Arabic Coffee</button>
     <button class="cat-tab"        data-cat="capsules"  onclick="switchCategory('capsules')"  data-i18n="cat_capsules">Capsules</button>
     <button class="cat-tab"        data-cat="spices"    onclick="switchCategory('spices')"    data-i18n="cat_spices">Spices &amp; Wellness</button>
   </div>
@@ -590,8 +592,8 @@ const i18n = {
     stat1:'PRODUCTS',stat2:'COLLECTIONS',stat3:'QUALITY',
     cat_all:'All Products',cat_bahib:'Bahib Al Shay',
     cat_teabags:'Tea Bags',cat_karak:'Karak',
-    cat_turkish:'Turkish Coffee',cat_espresso:'Espresso',cat_capsules:'Capsules',cat_spices:'Spices & Wellness',
-    nav_spices:'Spices & Wellness',
+    cat_turkish:'Turkish Coffee',cat_arabic:'Arabic Coffee',cat_espresso:'Espresso',cat_capsules:'Capsules',cat_spices:'Spices & Wellness',
+    nav_spices:'Spices & Wellness',nav_arabic:'Arabic Coffee',
     products_label:'Clenso Collection',products_sub:'Premium pricing for the Saudi market',
     currency:'SAR',
     nova_label:'Premium Natural Chocolate',
@@ -632,8 +634,8 @@ const i18n = {
     stat1:'منتج',stat2:'مجموعات',stat3:'جودة',
     cat_all:'كل المنتجات',cat_bahib:'بحب الشاي',
     cat_teabags:'تي باق',cat_karak:'الكرك',
-    cat_turkish:'قهوة تركي',cat_espresso:'إسبريسو',cat_capsules:'كبسولات',cat_spices:'بهارات وصحة',
-    nav_spices:'بهارات وصحة',
+    cat_turkish:'قهوة تركي',cat_arabic:'قهوة عربية',cat_espresso:'إسبريسو',cat_capsules:'كبسولات',cat_spices:'بهارات وصحة',
+    nav_spices:'بهارات وصحة',nav_arabic:'قهوة عربية',
     products_label:'مجموعة كلينزو',products_sub:'أسعار تناسب السوق السعودي الراقي',
     currency:'ر.س',
     nova_label:'شوكولاتة طبيعية فاخرة',
@@ -680,7 +682,7 @@ const products = [
   {id:19,cat:'turkish',en:{name:'Signature Blend',sub:'Specialty Coffee · Whole Bean · 250g',desc:'Crafted by nature, perfected by passion. Notes of dark chocolate, caramel, and vanilla — our definitive whole-bean expression.',tags:['100% Arabica','Specialty Coffee','Whole Bean']},ar:{name:'المزيج المميز',sub:'قهوة متخصصة · حبوب كاملة · 250 جم',desc:'صُنع بالطبيعة، أُتقن بالشغف. نكهات الشوكولاتة الداكنة والكراميل والفانيلا.',tags:['100% أرابيكا','قهوة متخصصة','حبوب كاملة']},price:95,img:'products/COFFEE/قهوة تركي/turkish_coffee.png',featured:true},
   {id:20,cat:'espresso',en:{name:'Premium Espresso Blend',sub:'Dark Roast · 100% Arabica',desc:'Crafted for true coffee lovers. Every bean, every roast, every moment. A dark roast of smooth, rich aroma — ethically sourced.',tags:['100% Arabica','Dark Roast','Ethically Sourced']},ar:{name:'مزيج الإسبريسو الفاخر',sub:'تحميص داكن · 100% أرابيكا',desc:'صُنع لعشاق القهوة الحقيقيين. كل حبة، كل تحميص، كل لحظة. أريج غني وناعم.',tags:['100% أرابيكا','تحميص داكن','مصدر أخلاقي']},price:88,img:'products/COFFEE/سبريسو/espresso_premium_blend.png',badge:'premium'},
   {id:21,cat:'capsules',en:{name:'Signature Espresso Capsules',sub:'Premium Coffee Capsules · 10 Capsules',desc:'Rich. Smooth. Intense. Our signature espresso in perfectly portioned capsules — a cafe-quality shot at home.',tags:['Rich','Smooth','Intense','10 Capsules']},ar:{name:'كبسولات إسبريسو مميزة',sub:'كبسولات قهوة فاخرة · 10 كبسولات',desc:'غني. ناعم. كثيف. إسبريسونا المميز في كبسولات مقسّمة بدقة — جرعة مقهى في المنزل.',tags:['غني','ناعم','كثيف','10 كبسولات']},price:72,img:'products/COFFEE/كبسولات قهوة/capsule_signature.png'},
-  {id:25,cat:'turkish',en:{name:'Clenso Turkish Coffee',sub:'Finely Ground · Premium Blend · 250g',desc:'A timeless ritual in every cup. Our premium Turkish coffee is finely ground from select arabica beans — rich, aromatic, and crafted for true coffee connoisseurs.',tags:['Finely Ground','100% Arabica','250g']},ar:{name:'كلينزو قهوة عربية',sub:'طحن ناعم · مزيج فاخر · 250 جم',desc:'طقوس خالدة في كل فنجان. قهوتنا العربية الفاخرة مطحونة ناعماً من حبوب أرابيكا مختارة — غنية وعطرة وصُنعت لعشاق القهوة الحقيقيين.',tags:['طحن ناعم','100% أرابيكا','250 جم']},price:75,img:'products/COFFEE/قهوة عربي /arabic_coffee.png',featured:true},
+  {id:25,cat:'arabic',en:{name:'Clenso Turkish Coffee',sub:'Finely Ground · Premium Blend · 250g',desc:'A timeless ritual in every cup. Our premium Turkish coffee is finely ground from select arabica beans — rich, aromatic, and crafted for true coffee connoisseurs.',tags:['Finely Ground','100% Arabica','250g']},ar:{name:'كلينزو قهوة عربية',sub:'طحن ناعم · مزيج فاخر · 250 جم',desc:'طقوس خالدة في كل فنجان. قهوتنا العربية الفاخرة مطحونة ناعماً من حبوب أرابيكا مختارة — غنية وعطرة وصُنعت لعشاق القهوة الحقيقيين.',tags:['طحن ناعم','100% أرابيكا','250 جم']},price:75,img:'products/COFFEE/قهوة عربي /arabic_coffee.png',featured:true},
   {id:26,cat:'capsules',en:{name:'Ristretto',sub:'Espresso Capsules · Intensity 5 · 10 Capsules',desc:'Short, bold, and perfectly balanced. Our Ristretto delivers a concentrated shot of pure espresso with a velvety crema — intensity in its purest form.',tags:['Intensity 5','Ristretto','10 Capsules']},ar:{name:'ريسترتو',sub:'كبسولات إسبريسو · كثافة 5 · 10 كبسولات',desc:'قصير وجريء ومتوازن تماماً. ريسترتو يقدم جرعة مركزة من الإسبريسو الخالص مع كريما مخملية — الكثافة في أنقى صورها.',tags:['كثافة 5','ريسترتو','10 كبسولات']},price:68,img:'products/COFFEE/كبسولات قهوة/capsule_ristretto.png'},
   {id:27,cat:'espresso',en:{name:'Espresso Forte',sub:'Dark Roast · Intensity 9 · 250g',desc:'Bold. Powerful. Uncompromising. Espresso Forte pushes the boundaries of intensity with a deep, roasted profile and a full-bodied crema that commands attention.',tags:['Intensity 9','Dark Roast','250g']},ar:{name:'إسبريسو فورتي',sub:'تحميص داكن · كثافة 9 · 250 جم',desc:'جريء. قوي. بلا تنازلات. إسبريسو فورتي يدفع حدود الكثافة بنكهة محمصة عميقة وكريما كثيفة تستدعي الانتباه.',tags:['كثافة 9','تحميص داكن','250 جم']},price:88,img:'products/COFFEE/سبريسو/espresso_forte.png',badge:'premium'},
   {id:28,cat:'espresso',en:{name:'Espresso Classico',sub:'Medium Roast · Intensity 7 · 250g',desc:'The classic espresso experience, perfected. Balanced acidity, smooth body, and a rich aromatic finish — the everyday cup that never disappoints.',tags:['Intensity 7','Balanced','250g']},ar:{name:'إسبريسو كلاسيكو',sub:'تحميص متوسط · كثافة 7 · 250 جم',desc:'تجربة الإسبريسو الكلاسيكية، متقنة. حموضة متوازنة وجسم ناعم ونهاية عطرية غنية — الفنجان اليومي الذي لا يخيب.',tags:['كثافة 7','متوازن','250 جم']},price:85,img:'products/COFFEE/سبريسو/espresso_classico.png'},
@@ -761,7 +763,7 @@ function goSlide(n){
 }
 
 let currentCat='all';
-const catKeys={all:'cat_all',bahib:'cat_bahib',teabags:'cat_teabags',karak:'cat_karak',turkish:'cat_turkish',espresso:'cat_espresso',capsules:'cat_capsules',spices:'cat_spices'};
+const catKeys={all:'cat_all',bahib:'cat_bahib',teabags:'cat_teabags',karak:'cat_karak',turkish:'cat_turkish',arabic:'cat_arabic',espresso:'cat_espresso',capsules:'cat_capsules',spices:'cat_spices'};
 function getCatLabel(cat){return t(catKeys[cat]||'cat_all')}
 function getBadge(k){return k?t('badge_'+k):''}
 
