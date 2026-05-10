@@ -314,6 +314,22 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
 .cart-summary-row.total{font-size:16px;font-weight:800;color:var(--text);
   border-top:1px solid var(--border);padding-top:11px;margin-top:11px}
 .cart-summary-row.total span:last-child{color:var(--gold-dark)}
+/* ── FREE SHIPPING BANNER ── */
+.free-ship-banner{padding:9px 14px;border-radius:8px;font-size:12px;font-weight:700;
+  margin-bottom:12px;text-align:center;transition:all .3s}
+.free-ship-banner.earned{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7}
+.free-ship-banner.progress{background:#fff8e1;color:#f57f17;border:1px solid #ffe082}
+/* ── REGION SELECTOR ── */
+.region-section{margin-bottom:14px}
+.region-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.region-option{cursor:pointer}
+.region-option input{display:none}
+.region-card{display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;
+  font-size:13px;font-weight:600;transition:all .18s;background:#fff;color:var(--text)}
+.region-option input:checked + .region-card{border-color:var(--gold);background:var(--gold-bg);color:var(--gold-dark)}
+.region-card:hover{border-color:rgba(201,168,76,.4)}
+.region-icon{font-size:16px}
 .payment-section{margin-bottom:16px}
 .payment-title{font-size:11px;letter-spacing:3px;color:var(--muted);
   text-transform:uppercase;margin-bottom:9px;font-weight:700}
@@ -598,12 +614,34 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
     <div id="cartItems"></div>
   </div>
   <div class="cart-footer" id="cartFooter" style="display:none">
+    <!-- free shipping progress bar -->
+    <div id="freeShipBanner" class="free-ship-banner" style="display:none"></div>
+    <!-- region selector -->
+    <div class="region-section">
+      <p class="payment-title" data-i18n="region_title">Delivery Region</p>
+      <div class="region-grid">
+        <label class="region-option">
+          <input type="radio" name="region" value="riyadh" checked onchange="updateCartUI()"/>
+          <div class="region-card">
+            <span class="region-icon">🏙️</span>
+            <span data-i18n="region_riyadh">الرياض</span>
+          </div>
+        </label>
+        <label class="region-option">
+          <input type="radio" name="region" value="other" onchange="updateCartUI()"/>
+          <div class="region-card">
+            <span class="region-icon">🗺️</span>
+            <span data-i18n="region_other">مناطق أخرى</span>
+          </div>
+        </label>
+      </div>
+    </div>
     <div class="cart-summary">
       <div class="cart-summary-row">
         <span data-i18n="cart_subtotal">Subtotal</span><span id="cartSubtotal">0 SAR</span>
       </div>
       <div class="cart-summary-row">
-        <span data-i18n="cart_shipping">Shipping</span><span data-i18n="cart_free">Free</span>
+        <span data-i18n="cart_shipping">Shipping</span><span id="cartShipping">—</span>
       </div>
       <div class="cart-summary-row total">
         <span data-i18n="cart_total">Total</span><span id="cartTotal">0 SAR</span>
@@ -731,6 +769,10 @@ const i18n = {
     cart_subtotal:'Subtotal',cart_shipping:'Shipping',cart_free:'Free',
     cart_total:'Total',pay_title:'Payment Method',
     checkout_btn:'Place Order',toast_added:'added to cart',cart_remove:'Remove',
+    region_title:'Delivery Region',region_riyadh:'Riyadh',region_other:'Other Regions',
+    ship_free:'✅ Free delivery on this order!',
+    ship_progress:'🚚 Add {n} SAR more for free delivery',
+    ship_vat:'Prices include VAT (15%)',
     order_title:'Delivery Information',order_sub:'Enter your details to complete the order via WhatsApp',
     ord_name_lbl:'Full Name',ord_phone_lbl:'Phone Number',ord_email_lbl:'Email',
     ord_address_lbl:'National Address',ord_landmark_lbl:'Nearby Landmark',
@@ -778,6 +820,10 @@ const i18n = {
     cart_subtotal:'المجموع الفرعي',cart_shipping:'الشحن',cart_free:'مجاني',
     cart_total:'الإجمالي',pay_title:'طريقة الدفع',
     checkout_btn:'إتمام الطلب',toast_added:'أُضيف إلى السلة',cart_remove:'حذف',
+    region_title:'منطقة التوصيل',region_riyadh:'الرياض',region_other:'مناطق أخرى',
+    ship_free:'✅ التوصيل مجاني على هذا الطلب!',
+    ship_progress:'🚚 أضف {n} ريال للحصول على توصيل مجاني',
+    ship_vat:'الأسعار شاملة ضريبة القيمة المضافة (١٥٪)',
     order_title:'بيانات التوصيل',order_sub:'أدخل بياناتك لإتمام الطلب عبر واتساب',
     ord_name_lbl:'الاسم الكامل',ord_phone_lbl:'رقم الجوال',ord_email_lbl:'البريد الإلكتروني',
     ord_address_lbl:'العنوان الوطني',ord_landmark_lbl:'علامة مميزة قرب الموقع',
@@ -974,8 +1020,14 @@ function changeQty(id,delta){
 function removeItem(id){delete cart[id]; updateCartUI()}
 function getCount(){return Object.values(cart).reduce((s,i)=>s+i.qty,0)}
 function getTotal(){return Object.values(cart).reduce((s,i)=>s+i.p.price*i.qty,0)}
+function getShipping(){
+  const sub=getTotal();
+  if(sub>=200) return 0;
+  const region=document.querySelector('input[name="region"]:checked')?.value||'riyadh';
+  return region==='riyadh'?25:35;
+}
 function updateCartUI(){
-  const count=getCount(),total=getTotal(),cur=t('currency');
+  const count=getCount(),sub=getTotal(),cur=t('currency');
   const badge=document.getElementById('cartBadge');
   badge.textContent=count; badge.style.display=count>0?'flex':'none';
   const isEmpty=count===0;
@@ -983,8 +1035,23 @@ function updateCartUI(){
   document.getElementById('cartItems').style.display=isEmpty?'none':'block';
   document.getElementById('cartFooter').style.display=isEmpty?'none':'block';
   if(!isEmpty){
-    document.getElementById('cartSubtotal').textContent=`${total} ${cur}`;
+    const shipping=getShipping();
+    const total=sub+shipping;
+    document.getElementById('cartSubtotal').textContent=`${sub} ${cur}`;
+    document.getElementById('cartShipping').textContent=shipping===0?t('cart_free'):`${shipping} ${cur}`;
     document.getElementById('cartTotal').textContent=`${total} ${cur}`;
+    // free shipping banner
+    const banner=document.getElementById('freeShipBanner');
+    if(sub>=200){
+      banner.className='free-ship-banner earned';
+      banner.textContent=t('ship_free');
+      banner.style.display='block';
+    } else {
+      const need=200-sub;
+      banner.className='free-ship-banner progress';
+      banner.textContent=t('ship_progress').replace('{n}',need);
+      banner.style.display='block';
+    }
     renderCartItems();
   }
 }
@@ -1025,14 +1092,16 @@ function closeCart(){
 }
 function checkout(){
   if(!Object.keys(cart).length) return;
-  // Build order summary inside modal
-  const total=Object.values(cart).reduce((s,{p,qty})=>s+p.price*qty,0);
+  const sub=getTotal(), shipping=getShipping(), total=sub+shipping, cur=t('currency');
+  const region=document.querySelector('input[name="region"]:checked')?.value||'riyadh';
   const rows=Object.values(cart).map(({p,qty})=>{
     const d=p[currentLang];
-    return `<div class="order-summary-row"><span>${d.name} × ${qty}</span><span>${p.price*qty} ${t('currency')}</span></div>`;
+    return `<div class="order-summary-row"><span>${d.name} × ${qty}</span><span>${p.price*qty} ${cur}</span></div>`;
   }).join('');
+  const shipRow=`<div class="order-summary-row"><span>${t('cart_shipping')}</span><span>${shipping===0?t('cart_free'):shipping+' '+cur}</span></div>`;
+  const vatNote=`<p style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center">${t('ship_vat')}</p>`;
   document.getElementById('orderSummaryBlock').innerHTML=
-    rows+`<div class="order-summary-total"><span>${t('cart_total')}</span><span>${total} ${t('currency')}</span></div>`;
+    rows+shipRow+`<div class="order-summary-total"><span>${t('cart_total')}</span><span>${total} ${cur}</span></div>`+vatNote;
   document.getElementById('orderOverlay').classList.add('open');
 }
 function closeOrderModal(e,force){
@@ -1057,10 +1126,12 @@ function submitOrder(e){
   const landmark=document.getElementById('ord_landmark').value.trim();
   const hasPhoto=document.getElementById('ord_photo').files.length>0;
   const method=document.querySelector('input[name="payment"]:checked')?.value||'';
-  const total=Object.values(cart).reduce((s,{p,qty})=>s+p.price*qty,0);
+  const region=document.querySelector('input[name="region"]:checked')?.value||'riyadh';
+  const regionNames={riyadh:'الرياض',other:'مناطق أخرى'};
+  const sub=getTotal(), shipping=getShipping(), total=sub+shipping, cur=t('currency');
   const items=Object.values(cart).map(({p,qty})=>{
     const d=p[currentLang];
-    return `• ${d.name} × ${qty}  →  ${p.price*qty} ${t('currency')}`;
+    return `• ${d.name} × ${qty}  →  ${p.price*qty} ${cur}`;
   }).join('\n');
   const payNames={visa:'Visa',mada:'مدى',mastercard:'Mastercard',applepay:'Apple Pay',stcpay:'STC Pay',urpay:'UrPay يور باي'};
   const msg=
@@ -1072,11 +1143,14 @@ function submitOrder(e){
     `🏠 العنوان: ${address}\n`+
     `📍 علامة مميزة: ${landmark}\n`+
     (hasPhoto?`📸 صورة المبنى: سيتم إرسالها\n`:``)+
+    `🗺️ المنطقة: ${regionNames[region]}\n`+
     `💳 الدفع: ${payNames[method]||method}\n`+
     `━━━━━━━━━━━━━━━━\n`+
     `${items}\n`+
+    `🚚 التوصيل: ${shipping===0?'مجاني':shipping+' '+cur}\n`+
     `━━━━━━━━━━━━━━━━\n`+
-    `💰 الإجمالي: ${total} ${t('currency')}`;
+    `💰 الإجمالي: ${total} ${cur}\n`+
+    `🧾 الأسعار شاملة ضريبة القيمة المضافة (١٥٪)`;
   window.open(`https://wa.me/966539460440?text=${encodeURIComponent(msg)}`,'_blank');
   closeOrderModal(null,true);
   closeCart();
