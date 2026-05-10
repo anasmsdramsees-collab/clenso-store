@@ -635,16 +635,14 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
         <label class="pay-option">
           <input type="radio" name="payment" value="mada"/>
           <div class="pay-card">
-            <!-- mada official logo -->
-            <svg width="72" height="26" viewBox="0 0 72 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="72" height="26" rx="5" fill="white"/>
-              <!-- mada green wave mark -->
-              <path d="M6 13 C6 8 10 5 14 7 C16 8 17 10 17 13 C17 16 15 19 12 19 C9 19 6 17 6 13Z" fill="#007A4E"/>
-              <path d="M14 7 C18 5 22 8 22 13 C22 18 18 20 15 19" stroke="#007A4E" stroke-width="2.5" fill="none"/>
-              <!-- mada text -->
-              <text x="25" y="17" font-family="'Arial',sans-serif" font-weight="800" font-size="11" fill="#007A4E" letter-spacing="0.5">mada</text>
-              <!-- Arabic مدى -->
-              <text x="54" y="17" font-family="'Arial',sans-serif" font-weight="700" font-size="9" fill="#007A4E">مدى</text>
+            <!-- mada real logo: blue+green bars with مدى / mada text -->
+            <svg width="76" height="32" viewBox="0 0 76 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- top row: blue bar + مدى -->
+              <rect x="0" y="2" width="13" height="12" rx="1.5" fill="#29ABE2"/>
+              <text x="16" y="12" font-family="'Arial',sans-serif" font-weight="700" font-size="10" fill="#231F20">مدى</text>
+              <!-- bottom row: green bar + mada -->
+              <rect x="0" y="17" width="13" height="12" rx="1.5" fill="#8DC63F"/>
+              <text x="16" y="27" font-family="'Arial',sans-serif" font-weight="700" font-size="10" fill="#231F20">mada</text>
             </svg>
           </div>
         </label>
@@ -657,26 +655,30 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
         <label class="pay-option">
           <input type="radio" name="payment" value="stcpay"/>
           <div class="pay-card">
-            <!-- STC Pay logo -->
-            <svg width="70" height="26" viewBox="0 0 70 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="70" height="26" rx="5" fill="#6B1F7C"/>
-              <text x="7" y="17" font-family="'Arial',sans-serif" font-weight="900" font-size="10" fill="white" letter-spacing="0.3">stc</text>
-              <rect x="28" y="7" width="1.5" height="12" rx="1" fill="rgba(255,255,255,0.4)"/>
-              <text x="32" y="17" font-family="'Arial',sans-serif" font-weight="700" font-size="10" fill="#A8FF78" letter-spacing="0.3">pay</text>
+            <!-- STC Pay real logo: dark purple stc + cross mark + green pay -->
+            <svg width="88" height="30" viewBox="0 0 88 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- stc bold purple -->
+              <text x="0" y="22" font-family="'Arial Black','Arial',sans-serif" font-weight="900" font-size="22" fill="#3D0080">stc</text>
+              <!-- cross/plus mark (3 squares in + shape) -->
+              <rect x="52" y="5"  width="7" height="7" rx="1" fill="#3D0080"/>
+              <rect x="45" y="12" width="7" height="7" rx="1" fill="#3D0080"/>
+              <rect x="52" y="12" width="7" height="7" rx="1" fill="#3D0080"/>
+              <rect x="59" y="12" width="7" height="7" rx="1" fill="#3D0080"/>
+              <!-- pay green -->
+              <text x="52" y="29" font-family="'Arial Black','Arial',sans-serif" font-weight="900" font-size="17" fill="#00CC6A">pay</text>
             </svg>
           </div>
         </label>
         <label class="pay-option">
           <input type="radio" name="payment" value="urpay"/>
           <div class="pay-card">
-            <!-- UrPay (Al Rajhi) logo -->
-            <svg width="72" height="26" viewBox="0 0 72 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="72" height="26" rx="5" fill="#1B3A6B"/>
-              <!-- ur arc symbol -->
-              <path d="M7 18 C7 12 10 8 14 8 C18 8 20 12 20 15" stroke="#F0A500" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-              <circle cx="20" cy="16" r="2" fill="#F0A500"/>
-              <text x="25" y="17" font-family="'Arial',sans-serif" font-weight="800" font-size="9.5" fill="white" letter-spacing="0.3">urpay</text>
-              <text x="50" y="17" font-family="'Arial',sans-serif" font-weight="600" font-size="8" fill="#F0A500">يور باي</text>
+            <!-- UrPay real logo: blue mark + urpay text -->
+            <svg width="82" height="30" viewBox="0 0 82 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- stylized ur mark: outer U + inner loop -->
+              <path d="M4 4 L4 18 Q4 26 12 26 Q20 26 20 18 L20 14" stroke="#2D5BE3" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              <path d="M10 10 L10 19 Q10 23 14 23 Q18 23 18 19 L18 14" stroke="#2D5BE3" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <!-- urpay text -->
+              <text x="25" y="22" font-family="'Arial Black','Arial',sans-serif" font-weight="900" font-size="17" fill="#2D5BE3">urpay</text>
             </svg>
           </div>
         </label>
@@ -937,7 +939,7 @@ function productCard(p,isNova){
         <p class="product-desc">${d.desc}</p>
         <div class="product-footer">
           <div class="product-price">${p.price}<span>${currency}</span></div>
-          <button class="add-btn${isNova?' nova-add':''}" onclick="addToCart(${JSON.stringify(p.id)})">+</button>
+          <button class="add-btn${isNova?' nova-add':''}" onclick="addToCart('${p.id}')">+</button>
         </div>
       </div>
     </div>`;
@@ -1000,13 +1002,13 @@ function renderCartItems(){
           <p class="cart-item-sub">${d.sub}</p>
           <div class="cart-item-row">
             <div class="qty-control">
-              <button class="qty-btn" onclick="changeQty(${JSON.stringify(p.id)},-1)">&#8722;</button>
+              <button class="qty-btn" onclick="changeQty('${p.id}',-1)">&#8722;</button>
               <span class="qty-num">${qty}</span>
-              <button class="qty-btn" onclick="changeQty(${JSON.stringify(p.id)},1)">+</button>
+              <button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button>
             </div>
             <span class="cart-item-price">${p.price*qty} ${t('currency')}</span>
           </div>
-          <button class="cart-remove" onclick="removeItem(${JSON.stringify(p.id)})">${t('cart_remove')}</button>
+          <button class="cart-remove" onclick="removeItem('${p.id}')">${t('cart_remove')}</button>
         </div>
       </div>`;
   }).join('');
