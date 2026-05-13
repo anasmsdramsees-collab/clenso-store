@@ -372,6 +372,72 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
   .cart-drawer.open{right:0}
   [dir=rtl] .cart-drawer.open{left:0}
 }
+
+/* ── MR. CLENSO CHATBOT ── */
+.chat-bubble{position:fixed;bottom:28px;right:28px;z-index:10000;cursor:pointer;
+  width:68px;height:68px;border-radius:50%;background:var(--gold);
+  box-shadow:0 6px 28px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;
+  transition:transform .2s;border:3px solid #fff}
+[dir=rtl] .chat-bubble{right:auto;left:28px}
+.chat-bubble:hover{transform:scale(1.08)}
+.chat-bubble img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.chat-badge{position:absolute;top:-4px;right:-4px;background:#e53;color:#fff;
+  font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center}
+.chat-window{position:fixed;bottom:110px;right:28px;width:360px;max-height:580px;
+  background:#fff;border-radius:20px;box-shadow:0 16px 60px rgba(0,0,0,.18);
+  display:flex;flex-direction:column;z-index:9999;overflow:hidden;
+  transform:scale(.85) translateY(20px);opacity:0;pointer-events:none;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);transform-origin:bottom right}
+[dir=rtl] .chat-window{right:auto;left:28px;transform-origin:bottom left}
+.chat-window.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+.chat-header{background:linear-gradient(135deg,#2c1810,#5c3317);padding:16px 18px;
+  display:flex;align-items:center;gap:12px;flex-shrink:0}
+.chat-header-avatar{width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);object-fit:cover}
+.chat-header-info{flex:1}
+.chat-header-name{color:#fff;font-weight:700;font-size:15px}
+.chat-header-status{color:rgba(255,255,255,.65);font-size:11px;display:flex;align-items:center;gap:5px}
+.chat-header-status::before{content:'';width:7px;height:7px;background:#4caf50;border-radius:50%;display:inline-block}
+.chat-close{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:20px;padding:4px;line-height:1}
+.chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;
+  background:linear-gradient(180deg,#faf8f5 0%,#fff 100%)}
+.chat-body::-webkit-scrollbar{width:4px}
+.chat-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:2px}
+.chat-msg{display:flex;gap:8px;align-items:flex-end;max-width:90%}
+.chat-msg.bot{align-self:flex-start}
+.chat-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.chat-msg-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.chat-bubble-text{padding:10px 14px;border-radius:18px;font-size:13.5px;line-height:1.6;max-width:260px}
+.chat-msg.bot .chat-bubble-text{background:#f2ede8;color:var(--text);border-bottom-left-radius:4px}
+.chat-msg.user .chat-bubble-text{background:linear-gradient(135deg,#5c3317,#8b4e24);color:#fff;border-bottom-right-radius:4px}
+.chat-choices{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 12px;flex-shrink:0}
+.chat-choice{background:#fff;border:1.5px solid var(--gold);color:var(--gold-dark);
+  padding:8px 14px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;
+  transition:all .18s;font-family:'Cairo',sans-serif;white-space:nowrap}
+.chat-choice:hover{background:var(--gold);color:#fff;transform:translateY(-1px)}
+.chat-rec{background:#fff;border:1px solid #e8ddd5;border-radius:14px;overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);margin:4px 0}
+.chat-rec-img{width:100%;height:130px;object-fit:cover}
+.chat-rec-body{padding:10px 12px}
+.chat-rec-name{font-weight:700;font-size:13px;color:var(--text)}
+.chat-rec-sub{font-size:11px;color:var(--muted);margin:2px 0 8px}
+.chat-rec-price{font-weight:800;color:var(--gold-dark);font-size:14px}
+.chat-rec-add{background:var(--gold);color:#fff;border:none;border-radius:8px;
+  padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;
+  transition:background .18s;float:left}
+[dir=rtl] .chat-rec-add{float:right}
+.chat-rec-add:hover{background:var(--gold-dark)}
+.chat-rec-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.chat-typing{display:flex;gap:4px;align-items:center;padding:4px 0}
+.chat-typing span{width:7px;height:7px;background:var(--muted);border-radius:50%;
+  animation:chatBounce .9s infinite ease-in-out}
+.chat-typing span:nth-child(2){animation-delay:.15s}
+.chat-typing span:nth-child(3){animation-delay:.3s}
+@keyframes chatBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+.chat-restart{background:none;border:1px solid rgba(0,0,0,.15);color:var(--muted);
+  padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;
+  font-family:'Cairo',sans-serif;margin:0 16px 14px;align-self:center;transition:all .18s}
+.chat-restart:hover{border-color:var(--gold);color:var(--gold-dark)}
 </style>
 </head>
 <body>
@@ -557,6 +623,23 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
     </div>
   </div>
 </footer>
+
+<!-- MR. CLENSO CHATBOT -->
+<div class="chat-bubble" id="chatBubble" onclick="toggleChat()">
+  <img src="logo/mr-clenso.png" alt="Mr. Clenso"/>
+</div>
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <img class="chat-header-avatar" src="logo/mr-clenso.png" alt="Mr. Clenso"/>
+    <div class="chat-header-info">
+      <div class="chat-header-name">Mr. Clenso ☕</div>
+      <div class="chat-header-status" data-i18n="chat_online">Online — ready to help</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-choices" id="chatChoices"></div>
+</div>
 
 <div class="toast" id="toast"></div>
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
@@ -1183,6 +1266,329 @@ function showToast(msg){
   setTimeout(()=>el.classList.remove('show'),2800);
 }
 initSlider(); renderProducts(); renderNova(); updateCartUI();
+
+/* ═══════════════════════════════════════
+   MR. CLENSO — CHATBOT ENGINE
+═══════════════════════════════════════ */
+let chatOpen=false;
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chatWindow').classList.toggle('open',chatOpen);
+  if(chatOpen && document.getElementById('chatBody').children.length===0) startChat();
+}
+
+// ── All products lookup ──
+function allProds(){return [...products,...novaProducts];}
+function findProd(id){return allProds().find(p=>String(p.id)===String(id));}
+
+// ── Conversation Tree ──
+const chatTree={
+  start:{
+    bot:{ar:'أهلاً وسهلاً! 👋\nأنا مستر كلينزو، مستشارك الشخصي للقهوة والشاي والشوكولاتة ☕🍵🍫\nعايزني أساعدك في إيه؟',
+         en:'Hey there! 👋\nI\'m Mr. Clenso, your personal guide for coffee, tea & chocolate ☕🍵🍫\nHow can I help you?'},
+    choices:[
+      {ar:'اختار لي منتجي 🎯',en:'Help me choose 🎯',next:'pickType'},
+      {ar:'عاوز هدية لحد 🎁',en:'Find me a gift 🎁',next:'giftWho'}
+    ]
+  },
+  pickType:{
+    bot:{ar:'تمام! بتحب إيه؟ 😊',en:'Great! What do you love?'},
+    choices:[
+      {ar:'☕ قهوة',en:'☕ Coffee',next:'coffeeStyle'},
+      {ar:'🍵 شاي',en:'🍵 Tea',next:'teaStyle'},
+      {ar:'🍫 شوكولاتة',en:'🍫 Chocolate',next:'chocoStyle'}
+    ]
+  },
+
+  /* ── COFFEE ── */
+  coffeeStyle:{
+    bot:{ar:'قهوتك إيه؟ ☕',en:'How do you like your coffee? ☕'},
+    choices:[
+      {ar:'قوية وسادة 💪',en:'Strong & Black 💪',next:'rec_strong_coffee'},
+      {ar:'بالحليب أو كرك 🥛',en:'Milky or Karak 🥛',next:'karakOrLatte'},
+      {ar:'منكهة وخفيفة ✨',en:'Flavored & Light ✨',next:'coffeeFlavorPick'},
+      {ar:'كبسولات سريعة ⚡',en:'Quick Capsules ⚡',next:'capsuleFlavor'}
+    ]
+  },
+  karakOrLatte:{
+    bot:{ar:'تفضل كرك ولا لاتيه؟',en:'Karak or Latte?'},
+    choices:[
+      {ar:'كرك أصيل 🫖',en:'Authentic Karak 🫖',next:'rec_karak'},
+      {ar:'لاتيه بالحليب ☕',en:'Milk Latte ☕',next:'rec_latte'}
+    ]
+  },
+  coffeeFlavorPick:{
+    bot:{ar:'أي نكهة تحب؟ 🌟',en:'What flavor? 🌟'},
+    choices:[
+      {ar:'فانيلا 🍦',en:'Vanilla 🍦',next:'rec_vanilla'},
+      {ar:'كراميل 🍮',en:'Caramel 🍮',next:'rec_caramel_cap'},
+      {ar:'بندق 🌰',en:'Hazelnut 🌰',next:'rec_hazelnut_cap'},
+      {ar:'جوز الهند 🥥',en:'Coconut 🥥',next:'rec_coconut_cap'}
+    ]
+  },
+  capsuleFlavor:{
+    bot:{ar:'أي نكهة كبسولة تحب؟ ⚡',en:'Which capsule flavor? ⚡'},
+    choices:[
+      {ar:'كلاسيك إسبريسو',en:'Classic Espresso',next:'rec_espresso_sig'},
+      {ar:'ريسترتو',en:'Ristretto',next:'rec_ristretto'},
+      {ar:'كراميل',en:'Caramel',next:'rec_caramel_cap'},
+      {ar:'بندق',en:'Hazelnut',next:'rec_hazelnut_cap'},
+      {ar:'موكا',en:'Mocha',next:'rec_mocha_cap'}
+    ]
+  },
+
+  /* ── TEA ── */
+  teaStyle:{
+    bot:{ar:'أنت من أي فريق شاي؟ 🍵',en:'What\'s your tea style? 🍵'},
+    choices:[
+      {ar:'كلاسيك أو إيرل غراي',en:'Classic or Earl Grey',next:'teaClassicPick'},
+      {ar:'أخضر أو ياسمين 🌿',en:'Green or Jasmine 🌿',next:'teaGreenPick'},
+      {ar:'فواكه ومنعش 🍓',en:'Fruity & Refreshing 🍓',next:'teaFruitPick'},
+      {ar:'كرك جلف خليجي 🫖',en:'Gulf Karak 🫖',next:'rec_karak'}
+    ]
+  },
+  teaClassicPick:{
+    bot:{ar:'تفضل؟',en:'Which one?'},
+    choices:[
+      {ar:'إفطار إنجليزي',en:'English Breakfast',next:'rec_english_breakfast'},
+      {ar:'إيرل غراي',en:'Earl Grey',next:'rec_earl_grey'},
+      {ar:'سيلاني خالص',en:'Pure Ceylon',next:'rec_ceylon'}
+    ]
+  },
+  teaGreenPick:{
+    bot:{ar:'أخضر أو ياسمين؟ 🌸',en:'Green or Jasmine? 🌸'},
+    choices:[
+      {ar:'شاي أخضر',en:'Green Tea',next:'rec_green_tea'},
+      {ar:'ياسمين',en:'Jasmine',next:'rec_jasmine'},
+      {ar:'ماتشا',en:'Matcha',next:'rec_matcha'}
+    ]
+  },
+  teaFruitPick:{
+    bot:{ar:'أي فاكهة؟ 🍑',en:'Which fruit flavor? 🍑'},
+    choices:[
+      {ar:'خوخ وفاكهة العاطفة',en:'Peach & Passion Fruit',next:'rec_peach'},
+      {ar:'فراولة وتوت',en:'Strawberry & Raspberry',next:'rec_strawberry_tea'},
+      {ar:'ليمون وزنجبيل',en:'Lemon & Ginger',next:'rec_lemon_ginger'},
+      {ar:'تفاح وقرفة',en:'Apple & Cinnamon',next:'rec_apple_cinnamon'}
+    ]
+  },
+
+  /* ── CHOCOLATE ── */
+  chocoStyle:{
+    bot:{ar:'شوكولاتة إيه تحب؟ 🍫',en:'What kind of chocolate? 🍫'},
+    choices:[
+      {ar:'ألواح شوكولاتة 🍫',en:'Chocolate Bars 🍫',next:'chocoBarPick'},
+      {ar:'دراجيه وحلويات 🍬',en:'Dragées & Confections 🍬',next:'rec_dragees'},
+      {ar:'شوكولاتة دبي 🇦🇪',en:'Dubai Chocolate 🇦🇪',next:'rec_dubai_choc'},
+      {ar:'بونبون فاخر 🎀',en:'Luxury Bonbons 🎀',next:'rec_bonbons'}
+    ]
+  },
+  chocoBarPick:{
+    bot:{ar:'أي نوع لوح؟',en:'Which bar type?'},
+    choices:[
+      {ar:'داكنة 70%',en:'Dark 70%',next:'rec_dark_bar'},
+      {ar:'حليب كلاسيك',en:'Classic Milk',next:'rec_milk_bar'},
+      {ar:'بيضاء بالفستق والورد',en:'White Pistachio & Rose',next:'rec_white_rose'},
+      {ar:'حليب بالكراميل والملح',en:'Milk Caramel & Sea Salt',next:'rec_caramel_salt'}
+    ]
+  },
+
+  /* ── GIFT FLOW ── */
+  giftWho:{
+    bot:{ar:'الهدية لمين؟ 🎁',en:'Who\'s the gift for? 🎁'},
+    choices:[
+      {ar:'حبيب أو حبيبة 💑',en:'Romantic Partner 💑',next:'giftBudget_romantic'},
+      {ar:'صديق أو زميل 🤝',en:'Friend or Colleague 🤝',next:'giftBudget_friend'},
+      {ar:'عيلة أو مناسبة 👨‍👩‍👧',en:'Family or Occasion 👨‍👩‍👧',next:'giftOccasion'},
+      {ar:'هدية رسمية 💼',en:'Corporate Gift 💼',next:'giftBudget_corporate'}
+    ]
+  },
+  giftBudget_romantic:{
+    bot:{ar:'الميزانية؟ 💰',en:'What\'s the budget? 💰'},
+    choices:[
+      {ar:'أقل من 100 ريال',en:'Under 100 SAR',next:'rec_gift_romantic_s'},
+      {ar:'100–200 ريال',en:'100–200 SAR',next:'rec_gift_romantic_m'},
+      {ar:'أكثر من 200 ريال',en:'200+ SAR',next:'rec_gift_romantic_l'}
+    ]
+  },
+  giftBudget_friend:{
+    bot:{ar:'الميزانية؟ 💰',en:'What\'s the budget? 💰'},
+    choices:[
+      {ar:'أقل من 100 ريال',en:'Under 100 SAR',next:'rec_gift_friend_s'},
+      {ar:'100–200 ريال',en:'100–200 SAR',next:'rec_gift_friend_m'}
+    ]
+  },
+  giftOccasion:{
+    bot:{ar:'ما المناسبة؟ 🌙',en:'What\'s the occasion? 🌙'},
+    choices:[
+      {ar:'عيد أو رمضان 🌙',en:'Eid or Ramadan 🌙',next:'rec_gift_eid'},
+      {ar:'عيد ميلاد 🎂',en:'Birthday 🎂',next:'rec_gift_birthday'},
+      {ar:'شكر وتقدير',en:'Appreciation',next:'rec_gift_friend_m'}
+    ]
+  },
+  giftBudget_corporate:{
+    bot:{ar:'الميزانية؟ 💰',en:'Budget? 💰'},
+    choices:[
+      {ar:'100–300 ريال',en:'100–300 SAR',next:'rec_gift_corp_m'},
+      {ar:'أكثر من 300 ريال',en:'300+ SAR',next:'rec_gift_corp_l'}
+    ]
+  },
+
+  /* ── RECOMMENDATIONS ── */
+  rec_strong_coffee:{bot:{ar:'💪 للي يحب قهوته قوية — هذي اختياراتك:',en:'💪 For bold coffee lovers:'},recs:[43,27],next:true},
+  rec_karak:{bot:{ar:'🫖 كرك أصيل — هذا هو:',en:'🫖 Authentic Karak — here it is:'},recs:[17,18],next:true},
+  rec_latte:{bot:{ar:'☕ إسبريسو بالحليب — هذي أفضل خيارات:',en:'☕ Great latte options:'},recs:[28,31],next:true},
+  rec_vanilla:{bot:{ar:'🍦 فانيلا لاتيه — هذا هو:',en:'🍦 Vanilla Latte — here you go:'},recs:[31],next:true},
+  rec_caramel_cap:{bot:{ar:'🍮 كراميل — هذي أجمد كبسولات:',en:'🍮 Caramel capsules — your pick:'},recs:[32],next:true},
+  rec_hazelnut_cap:{bot:{ar:'🌰 بندق — ألذ كبسولة:',en:'🌰 Hazelnut — best capsule:'},recs:[33],next:true},
+  rec_coconut_cap:{bot:{ar:'🥥 جوز الهند — خفيفة ومميزة:',en:'🥥 Coconut — light & exotic:'},recs:[37],next:true},
+  rec_mocha_cap:{bot:{ar:'موكا — شوكولاتة وقهوة في كبسولة:',en:'Mocha — chocolate meets coffee:'},recs:[35],next:true},
+  rec_espresso_sig:{bot:{ar:'⚡ إسبريسو كلاسيك:',en:'⚡ Classic Espresso:'},recs:[21],next:true},
+  rec_ristretto:{bot:{ar:'ريسترتو — قصير ومركز:',en:'Ristretto — short & intense:'},recs:[26],next:true},
+  rec_english_breakfast:{bot:{ar:'🍵 الإفطار الإنجليزي — الكلاسيك الذهبي:',en:'🍵 English Breakfast — the golden classic:'},recs:[1,6],next:true},
+  rec_earl_grey:{bot:{ar:'🍵 إيرل غراي — أناقة بعبير البرغموت:',en:'🍵 Earl Grey — bergamot elegance:'},recs:[2,7],next:true},
+  rec_ceylon:{bot:{ar:'🍵 سيلاني خالص — جودة من سريلانكا:',en:'🍵 Pure Ceylon — Sri Lanka quality:'},recs:[5,10],next:true},
+  rec_green_tea:{bot:{ar:'🌿 شاي أخضر نقي:',en:'🌿 Pure Green Tea:'},recs:[3,8],next:true},
+  rec_jasmine:{bot:{ar:'🌸 ياسمين — عبير وسكون:',en:'🌸 Jasmine — floral & calming:'},recs:[4,9],next:true},
+  rec_matcha:{bot:{ar:'🍵 ماتشا ياباني فاخر:',en:'🍵 Premium Japanese Matcha:'},recs:[34],next:true},
+  rec_peach:{bot:{ar:'🍑 خوخ وفاكهة العاطفة:',en:'🍑 Peach & Passion Fruit:'},recs:[11,16],next:true},
+  rec_strawberry_tea:{bot:{ar:'🍓 فراولة وتوت:',en:'🍓 Strawberry & Berry:'},recs:[12,13],next:true},
+  rec_lemon_ginger:{bot:{ar:'🍋 ليمون وزنجبيل — منشط طبيعي:',en:'🍋 Lemon & Ginger — natural energiser:'},recs:[14],next:true},
+  rec_apple_cinnamon:{bot:{ar:'🍎 تفاح وقرفة — دفء ومتعة:',en:'🍎 Apple & Cinnamon — warm delight:'},recs:[15],next:true},
+  rec_dubai_choc:{bot:{ar:'🇦🇪 شوكولاتة دبي — الموجة الجديدة:',en:'🇦🇪 Dubai Chocolate — the viral sensation:'},recs:['n9'],next:true},
+  rec_dark_bar:{bot:{ar:'🍫 داكنة 70% كاكاو:',en:'🍫 Dark 70% Cocoa bar:'},recs:['n11','n1'],next:true},
+  rec_milk_bar:{bot:{ar:'🍫 حليب ناعم:',en:'🍫 Silky milk chocolate:'},recs:['n2','n10'],next:true},
+  rec_white_rose:{bot:{ar:'🌹 بيضاء بالفستق والورد:',en:'🌹 White Chocolate Pistachio & Rose:'},recs:['n13'],next:true},
+  rec_caramel_salt:{bot:{ar:'🍮 كراميل وملح البحر — مزيج مذهل:',en:'🍮 Caramel & Sea Salt — irresistible combo:'},recs:['n12'],next:true},
+  rec_dragees:{bot:{ar:'🍬 دراجيه وحلويات لا نوفا:',en:'🍬 La Nova Dragées & Confections:'},recs:['n19','n22','n23'],next:true},
+  rec_bonbons:{bot:{ar:'🎀 بونبون فاخر — هدية مثالية:',en:'🎀 Luxury Bonbons — the perfect gift:'},recs:['n4','n5','n6'],next:true},
+  rec_gift_romantic_s:{bot:{ar:'💑 هدية رومانسية أقل من 100 ريال:',en:'💑 Romantic gift under 100 SAR:'},recs:['n13','n14','n4'],next:true},
+  rec_gift_romantic_m:{bot:{ar:'💑 هدية رومانسية رائعة:',en:'💑 Beautiful romantic gift:'},recs:['n5','n13','n3'],next:true},
+  rec_gift_romantic_l:{bot:{ar:'💑 هدية رومانسية فاخرة:',en:'💑 Luxury romantic gift:'},recs:['n6','n9','n13'],next:true},
+  rec_gift_friend_s:{bot:{ar:'🤝 هدية خفيفة وظريفة:',en:'🤝 Light & thoughtful gift:'},recs:['n17','n20','n18'],next:true},
+  rec_gift_friend_m:{bot:{ar:'🤝 هدية مميزة للأصدقاء:',en:'🤝 Great gift for friends:'},recs:['n5','n17','n10'],next:true},
+  rec_gift_eid:{bot:{ar:'🌙 هدايا العيد من لا نوفا:',en:'🌙 Eid Gifts from La Nova:'},recs:['n7','n8'],next:true},
+  rec_gift_birthday:{bot:{ar:'🎂 هدية عيد ميلاد لا تُنسى:',en:'🎂 Unforgettable birthday gift:'},recs:['n6','n9','n5'],next:true},
+  rec_gift_corp_m:{bot:{ar:'💼 هدايا شركات أنيقة:',en:'💼 Elegant corporate gifts:'},recs:['n6','n17'],next:true},
+  rec_gift_corp_l:{bot:{ar:'💼 هدايا شركات فاخرة:',en:'💼 Premium corporate gifts:'},recs:['n8','n7'],next:true}
+};
+
+// ── Chat Engine ──
+let chatState='start';
+function startChat(){
+  chatState='start';
+  document.getElementById('chatBody').innerHTML='';
+  document.getElementById('chatChoices').innerHTML='';
+  setTimeout(()=>showChatNode('start'),300);
+}
+
+function showChatNode(nodeKey){
+  const node=chatTree[nodeKey];
+  if(!node) return;
+  chatState=nodeKey;
+  addTyping().then(()=>{
+    const msg=node.bot?.[currentLang]||node.bot?.ar||'';
+    if(msg) addBotMsg(msg);
+    if(node.recs && node.recs.length){
+      setTimeout(()=>{
+        const body=document.getElementById('chatBody');
+        node.recs.forEach(id=>{
+          const p=findProd(id);
+          if(p) body.appendChild(buildRecCard(p));
+        });
+        scrollChat();
+        setTimeout(()=>showAfterRec(),600);
+      },300);
+    } else {
+      setTimeout(()=>renderChoices(node.choices||[]),400);
+    }
+  });
+}
+
+function showAfterRec(){
+  const afterChoices=[
+    {ar:'منتج آخر 🔄',en:'Another pick 🔄',next:'pickType'},
+    {ar:'دور على هدية 🎁',en:'Find a gift 🎁',next:'giftWho'},
+    {ar:'ابدأ من الأول',en:'Start over',next:'start'}
+  ];
+  renderChoices(afterChoices);
+}
+
+function addBotMsg(text){
+  const body=document.getElementById('chatBody');
+  const wrap=document.createElement('div');
+  wrap.className='chat-msg bot';
+  wrap.innerHTML=`<img class="chat-msg-avatar" src="logo/mr-clenso.png" alt="Mr. Clenso"/>
+    <div class="chat-bubble-text">${text.replace(/\n/g,'<br/>')}</div>`;
+  body.appendChild(wrap);
+  scrollChat();
+}
+
+function addUserMsg(text){
+  const body=document.getElementById('chatBody');
+  const wrap=document.createElement('div');
+  wrap.className='chat-msg user';
+  wrap.innerHTML=`<div class="chat-bubble-text">${text}</div>`;
+  body.appendChild(wrap);
+  scrollChat();
+}
+
+function addTyping(){
+  return new Promise(res=>{
+    const body=document.getElementById('chatBody');
+    const wrap=document.createElement('div');
+    wrap.className='chat-msg bot';
+    wrap.innerHTML=`<img class="chat-msg-avatar" src="logo/mr-clenso.png" alt=""/>
+      <div class="chat-bubble-text"><div class="chat-typing"><span></span><span></span><span></span></div></div>`;
+    body.appendChild(wrap);
+    scrollChat();
+    setTimeout(()=>{body.removeChild(wrap);res();},900);
+  });
+}
+
+function renderChoices(choices){
+  const box=document.getElementById('chatChoices');
+  box.innerHTML='';
+  choices.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.className='chat-choice';
+    btn.textContent=c[currentLang]||c.ar;
+    btn.onclick=()=>{
+      addUserMsg(btn.textContent);
+      box.innerHTML='';
+      setTimeout(()=>showChatNode(c.next),400);
+    };
+    box.appendChild(btn);
+  });
+}
+
+function buildRecCard(p){
+  const d=p[currentLang]||p.ar;
+  const cur=t('currency');
+  const div=document.createElement('div');
+  div.className='chat-rec';
+  div.innerHTML=`<img class="chat-rec-img" src="${p.img}" alt="${d.name}" loading="lazy" onerror="this.style.display='none'"/>
+    <div class="chat-rec-body">
+      <div class="chat-rec-name">${d.name}</div>
+      <div class="chat-rec-sub">${d.sub||''}</div>
+      <div class="chat-rec-footer">
+        <span class="chat-rec-price">${p.price} ${cur}</span>
+        <button class="chat-rec-add" onclick="addToCart('${p.id}');this.textContent='✓ ${currentLang==='ar'?'أضيف':'Added'}'">
+          ${currentLang==='ar'?'أضف للسلة +':`Add to Cart +`}
+        </button>
+      </div>
+    </div>`;
+  return div;
+}
+
+function scrollChat(){
+  const body=document.getElementById('chatBody');
+  requestAnimationFrame(()=>body.scrollTop=body.scrollHeight);
+}
+
+// Add i18n for chatbot
+translations.en.chat_online='Online — ready to help';
+translations.ar.chat_online='متصل — جاهز لمساعدتك';
 </script>
 </body>
 </html>
