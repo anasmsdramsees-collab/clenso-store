@@ -377,10 +377,13 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
 .chat-bubble{position:fixed;bottom:28px;right:28px;z-index:10000;cursor:pointer;
   width:68px;height:68px;border-radius:50%;background:var(--gold);
   box-shadow:0 6px 28px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;
-  transition:transform .2s;border:3px solid #fff}
+  transition:transform .2s;border:3px solid #fff;font-size:32px}
 [dir=rtl] .chat-bubble{right:auto;left:28px}
 .chat-bubble:hover{transform:scale(1.08)}
-.chat-bubble img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.chat-bubble img{width:100%;height:100%;border-radius:50%;object-fit:cover;position:absolute;top:0;left:0}
+.chat-bubble .chat-fallback{display:none}
+.chat-bubble img.broken + .chat-fallback,
+.chat-bubble img[data-error] + .chat-fallback{display:block}
 .chat-badge{position:absolute;top:-4px;right:-4px;background:#e53;color:#fff;
   font-size:11px;font-weight:700;width:18px;height:18px;border-radius:50%;
   display:flex;align-items:center;justify-content:center}
@@ -626,7 +629,8 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
 
 <!-- MR. CLENSO CHATBOT -->
 <div class="chat-bubble" id="chatBubble" onclick="toggleChat()">
-  <img src="logo/mr-clenso.png" alt="Mr. Clenso"/>
+  <img src="logo/mr-clenso.png" alt="Mr. Clenso" onerror="this.style.display='none';document.getElementById('chatEmoji').style.display='block'"/>
+  <span id="chatEmoji" style="display:none;position:relative;z-index:1">☕</span>
 </div>
 <div class="chat-window" id="chatWindow">
   <div class="chat-header">
@@ -1551,12 +1555,12 @@ function showAfterRec(){
   renderChoices(afterChoices);
 }
 
+const AVATAR_HTML=`<img class="chat-msg-avatar" src="logo/mr-clenso.png" alt="Mr. Clenso" onerror="this.outerHTML='<span class=\\'chat-msg-avatar\\'style=\\'background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border-radius:50%\\'>☕</span>'"/>`;
 function addBotMsg(text){
   const body=document.getElementById('chatBody');
   const wrap=document.createElement('div');
   wrap.className='chat-msg bot';
-  wrap.innerHTML=`<img class="chat-msg-avatar" src="logo/mr-clenso.png" alt="Mr. Clenso"/>
-    <div class="chat-bubble-text">${text.replace(/\n/g,'<br/>')}</div>`;
+  wrap.innerHTML=AVATAR_HTML+`<div class="chat-bubble-text">${text.replace(/\n/g,'<br/>')}</div>`;
   body.appendChild(wrap);
   scrollChat();
 }
@@ -1575,8 +1579,7 @@ function addTyping(){
     const body=document.getElementById('chatBody');
     const wrap=document.createElement('div');
     wrap.className='chat-msg bot';
-    wrap.innerHTML=`<img class="chat-msg-avatar" src="logo/mr-clenso.png" alt=""/>
-      <div class="chat-bubble-text"><div class="chat-typing"><span></span><span></span><span></span></div></div>`;
+    wrap.innerHTML=AVATAR_HTML+`<div class="chat-bubble-text"><div class="chat-typing"><span></span><span></span><span></span></div></div>`;
     body.appendChild(wrap);
     scrollChat();
     setTimeout(()=>{body.removeChild(wrap);res();},900);
@@ -1611,7 +1614,7 @@ function buildRecCard(p){
       <div class="chat-rec-footer">
         <span class="chat-rec-price">${p.price} ${cur}</span>
         <button class="chat-rec-add" onclick="addToCart('${p.id}');this.textContent='✓ ${currentLang==='ar'?'أضيف':'Added'}'">
-          ${currentLang==='ar'?'أضف للسلة +':`Add to Cart +`}
+          ${currentLang==='ar'?'أضف للسلة +':'Add to Cart +'}
         </button>
       </div>
     </div>`;
