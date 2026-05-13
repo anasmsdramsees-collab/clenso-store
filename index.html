@@ -403,7 +403,7 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
 .chat-header-status::before{content:'';width:7px;height:7px;background:#4caf50;border-radius:50%;display:inline-block}
 .chat-close{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:20px;padding:4px;line-height:1}
 .chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;
-  background:linear-gradient(180deg,#faf8f5 0%,#fff 100%)}
+  background:#f7f3ef}
 .chat-body::-webkit-scrollbar{width:4px}
 .chat-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:2px}
 .chat-msg{display:flex;gap:8px;align-items:flex-end;max-width:90%}
@@ -418,8 +418,8 @@ footer{background:var(--text);color:rgba(255,255,255,.55);padding:64px 0 28px}
   padding:8px 14px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;
   transition:all .18s;font-family:'Cairo',sans-serif;white-space:nowrap}
 .chat-choice:hover{background:var(--gold);color:#fff;transform:translateY(-1px)}
-.chat-rec{background:#fff;border:1px solid #e8ddd5;border-radius:14px;overflow:hidden;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);margin:4px 0}
+.chat-rec{background:#fdf6ef;border:1.5px solid #e0c9b0;border-radius:14px;overflow:hidden;
+  box-shadow:0 3px 12px rgba(92,51,23,.1);margin:4px 0}
 .chat-rec-img{width:100%;height:130px;object-fit:cover}
 .chat-rec-body{padding:10px 12px}
 .chat-rec-name{font-weight:700;font-size:13px;color:var(--text)}
@@ -1634,8 +1634,8 @@ function scrollChat(){
 }
 
 // Add i18n for chatbot
-translations.en.chat_online='Online — ready to help';
-translations.ar.chat_online='متصل — جاهز لمساعدتك';
+i18n.en.chat_online='Online — ready to help';
+i18n.ar.chat_online='متصل — جاهز لمساعدتك';
 </script>
 </body>
 </html>
