@@ -1395,42 +1395,63 @@ const chatTree={
 
   /* ── GIFT FLOW ── */
   giftWho:{
-    bot:{ar:'الهدية لمين؟ 🎁',en:'Who\'s the gift for? 🎁'},
+    bot:{ar:'ما هي المناسبة؟ 🎁',en:'What\'s the occasion? 🎁'},
     choices:[
-      {ar:'حبيب أو حبيبة 💑',en:'Romantic Partner 💑',next:'giftBudget_romantic'},
-      {ar:'صديق أو زميل 🤝',en:'Friend or Colleague 🤝',next:'giftBudget_friend'},
-      {ar:'عيلة أو مناسبة 👨‍👩‍👧',en:'Family or Occasion 👨‍👩‍👧',next:'giftOccasion'},
-      {ar:'هدية رسمية 💼',en:'Corporate Gift 💼',next:'giftBudget_corporate'}
+      {ar:'🎂 عيد ميلاد',en:'🎂 Birthday',next:'giftBudget_birthday'},
+      {ar:'🌙 عيد فطر أو أضحى',en:'🌙 Eid Al-Fitr or Al-Adha',next:'giftBudget_eid'},
+      {ar:'💍 عيد زواج',en:'💍 Wedding Anniversary',next:'giftBudget_wedding'},
+      {ar:'💼 هدية رسمية',en:'💼 Corporate Gift',next:'giftBudget_corporate'},
+      {ar:'🎀 توزيعات',en:'🎀 Party Favors',next:'giftBudget_favors'}
     ]
   },
-  giftBudget_romantic:{
-    bot:{ar:'الميزانية؟ 💰',en:'What\'s the budget? 💰'},
+
+  /* عيد ميلاد */
+  giftBudget_birthday:{
+    bot:{ar:'الميزانية؟ 🎂',en:'Budget? 🎂'},
     choices:[
-      {ar:'أقل من 100 ريال',en:'Under 100 SAR',next:'rec_gift_romantic_s'},
-      {ar:'100–200 ريال',en:'100–200 SAR',next:'rec_gift_romantic_m'},
-      {ar:'أكثر من 200 ريال',en:'200+ SAR',next:'rec_gift_romantic_l'}
+      {ar:'أقل من 100 ريال',en:'Under 100 SAR',next:'rec_bday_s'},
+      {ar:'100–200 ريال',en:'100–200 SAR',next:'rec_bday_m'},
+      {ar:'أكثر من 200 ريال',en:'200+ SAR',next:'rec_bday_l'}
     ]
   },
-  giftBudget_friend:{
-    bot:{ar:'الميزانية؟ 💰',en:'What\'s the budget? 💰'},
+
+  /* عيد فطر / أضحى */
+  giftBudget_eid:{
+    bot:{ar:'كم الميزانية للهدية العيدية؟ 🌙',en:'Eid gift budget? 🌙'},
     choices:[
-      {ar:'أقل من 100 ريال',en:'Under 100 SAR',next:'rec_gift_friend_s'},
-      {ar:'100–200 ريال',en:'100–200 SAR',next:'rec_gift_friend_m'}
+      {ar:'أقل من 200 ريال',en:'Under 200 SAR',next:'rec_eid_s'},
+      {ar:'200–500 ريال',en:'200–500 SAR',next:'rec_eid_m'},
+      {ar:'أكثر من 500 ريال',en:'500+ SAR',next:'rec_eid_l'}
     ]
   },
-  giftOccasion:{
-    bot:{ar:'ما المناسبة؟ 🌙',en:'What\'s the occasion? 🌙'},
+
+  /* عيد زواج */
+  giftBudget_wedding:{
+    bot:{ar:'الميزانية للهدية؟ 💍',en:'Wedding gift budget? 💍'},
     choices:[
-      {ar:'عيد أو رمضان 🌙',en:'Eid or Ramadan 🌙',next:'rec_gift_eid'},
-      {ar:'عيد ميلاد 🎂',en:'Birthday 🎂',next:'rec_gift_birthday'},
-      {ar:'شكر وتقدير',en:'Appreciation',next:'rec_gift_friend_m'}
+      {ar:'أقل من 150 ريال',en:'Under 150 SAR',next:'rec_wedding_s'},
+      {ar:'150–300 ريال',en:'150–300 SAR',next:'rec_wedding_m'},
+      {ar:'أكثر من 300 ريال',en:'300+ SAR',next:'rec_wedding_l'}
     ]
   },
+
+  /* هدية رسمية */
   giftBudget_corporate:{
-    bot:{ar:'الميزانية؟ 💰',en:'Budget? 💰'},
+    bot:{ar:'ميزانية الهدية الرسمية؟ 💼',en:'Corporate gift budget? 💼'},
     choices:[
-      {ar:'100–300 ريال',en:'100–300 SAR',next:'rec_gift_corp_m'},
-      {ar:'أكثر من 300 ريال',en:'300+ SAR',next:'rec_gift_corp_l'}
+      {ar:'أقل من 150 ريال',en:'Under 150 SAR',next:'rec_corp_s'},
+      {ar:'150–300 ريال',en:'150–300 SAR',next:'rec_corp_m'},
+      {ar:'أكثر من 300 ريال',en:'300+ SAR',next:'rec_corp_l'}
+    ]
+  },
+
+  /* توزيعات */
+  giftBudget_favors:{
+    bot:{ar:'كم عدد التوزيعات تقريباً؟ 🎀',en:'Approx. how many favors? 🎀'},
+    choices:[
+      {ar:'10–20 توزيعة',en:'10–20 favors',next:'rec_favors_s'},
+      {ar:'20–50 توزيعة',en:'20–50 favors',next:'rec_favors_m'},
+      {ar:'أكثر من 50',en:'50+ favors',next:'rec_favors_l'}
     ]
   },
 
@@ -1462,15 +1483,31 @@ const chatTree={
   rec_caramel_salt:{bot:{ar:'🍮 كراميل وملح البحر — مزيج مذهل:',en:'🍮 Caramel & Sea Salt — irresistible combo:'},recs:['n12'],next:true},
   rec_dragees:{bot:{ar:'🍬 دراجيه وحلويات لا نوفا:',en:'🍬 La Nova Dragées & Confections:'},recs:['n19','n22','n23'],next:true},
   rec_bonbons:{bot:{ar:'🎀 بونبون فاخر — هدية مثالية:',en:'🎀 Luxury Bonbons — the perfect gift:'},recs:['n4','n5','n6'],next:true},
-  rec_gift_romantic_s:{bot:{ar:'💑 هدية رومانسية أقل من 100 ريال:',en:'💑 Romantic gift under 100 SAR:'},recs:['n13','n14','n4'],next:true},
-  rec_gift_romantic_m:{bot:{ar:'💑 هدية رومانسية رائعة:',en:'💑 Beautiful romantic gift:'},recs:['n5','n13','n3'],next:true},
-  rec_gift_romantic_l:{bot:{ar:'💑 هدية رومانسية فاخرة:',en:'💑 Luxury romantic gift:'},recs:['n6','n9','n13'],next:true},
-  rec_gift_friend_s:{bot:{ar:'🤝 هدية خفيفة وظريفة:',en:'🤝 Light & thoughtful gift:'},recs:['n17','n20','n18'],next:true},
-  rec_gift_friend_m:{bot:{ar:'🤝 هدية مميزة للأصدقاء:',en:'🤝 Great gift for friends:'},recs:['n5','n17','n10'],next:true},
-  rec_gift_eid:{bot:{ar:'🌙 هدايا العيد من لا نوفا:',en:'🌙 Eid Gifts from La Nova:'},recs:['n7','n8'],next:true},
-  rec_gift_birthday:{bot:{ar:'🎂 هدية عيد ميلاد لا تُنسى:',en:'🎂 Unforgettable birthday gift:'},recs:['n6','n9','n5'],next:true},
-  rec_gift_corp_m:{bot:{ar:'💼 هدايا شركات أنيقة:',en:'💼 Elegant corporate gifts:'},recs:['n6','n17'],next:true},
-  rec_gift_corp_l:{bot:{ar:'💼 هدايا شركات فاخرة:',en:'💼 Premium corporate gifts:'},recs:['n8','n7'],next:true}
+
+  /* عيد ميلاد */
+  rec_bday_s:{bot:{ar:'🎂 هدية عيد ميلاد رائعة بأقل من 100:',en:'🎂 Great birthday gift under 100:'},recs:['n17','n20','n4'],next:true},
+  rec_bday_m:{bot:{ar:'🎂 هدية عيد ميلاد مميزة:',en:'🎂 Special birthday gift:'},recs:['n5','n9','n14'],next:true},
+  rec_bday_l:{bot:{ar:'🎂 هدية عيد ميلاد فاخرة لا تُنسى:',en:'🎂 Unforgettable luxury birthday gift:'},recs:['n6','n9','n13'],next:true},
+
+  /* عيد فطر / أضحى */
+  rec_eid_s:{bot:{ar:'🌙 هدية عيدية بميزانية بسيطة:',en:'🌙 Budget-friendly Eid gift:'},recs:['n5','n17'],next:true},
+  rec_eid_m:{bot:{ar:'🌙 هدية عيدية رائعة من لا نوفا:',en:'🌙 Wonderful Eid gift from La Nova:'},recs:['n7','n6'],next:true},
+  rec_eid_l:{bot:{ar:'🌙 الإصدار الكبير للعيد — هدية ملكية:',en:'🌙 Grand Eid Edition — a royal gift:'},recs:['n8','n7'],next:true},
+
+  /* عيد زواج */
+  rec_wedding_s:{bot:{ar:'💍 هدية زواج أنيقة ورومانسية:',en:'💍 Elegant & romantic wedding gift:'},recs:['n13','n14','n5'],next:true},
+  rec_wedding_m:{bot:{ar:'💍 هدية زواج فاخرة تليق بالمناسبة:',en:'💍 Luxury wedding gift worthy of the occasion:'},recs:['n6','n13','n3'],next:true},
+  rec_wedding_l:{bot:{ar:'💍 هدية زواج استثنائية من لا نوفا:',en:'💍 Exceptional La Nova wedding gift:'},recs:['n7','n13','n23'],next:true},
+
+  /* هدية رسمية */
+  rec_corp_s:{bot:{ar:'💼 هدية رسمية أنيقة ومرتبة:',en:'💼 Neat & professional corporate gift:'},recs:['n17','n20'],next:true},
+  rec_corp_m:{bot:{ar:'💼 هدية رسمية مميزة تعكس الاحترافية:',en:'💼 Premium corporate gift reflecting professionalism:'},recs:['n6','n17','n18'],next:true},
+  rec_corp_l:{bot:{ar:'💼 هدية رسمية فاخرة بمستوى الشركات الكبرى:',en:'💼 Top-tier luxury corporate gift:'},recs:['n8','n7'],next:true},
+
+  /* توزيعات */
+  rec_favors_s:{bot:{ar:'🎀 توزيعات خفيفة وأنيقة (10–20):',en:'🎀 Light & elegant favors (10–20):'},recs:['n19','n22','n4'],next:true},
+  rec_favors_m:{bot:{ar:'🎀 توزيعات مميزة بكميات متوسطة:',en:'🎀 Premium favors for medium quantities:'},recs:['n20','n23','n17'],next:true},
+  rec_favors_l:{bot:{ar:'🎀 توزيعات اقتصادية بكميات كبيرة — تواصل معنا للطلبات الكبيرة:',en:'🎀 Bulk favors — contact us for large orders:'},recs:['n19','n20','n22'],next:true}
 };
 
 // ── Chat Engine ──
