@@ -1547,12 +1547,18 @@ function showChatNode(nodeKey){
 }
 
 function showAfterRec(){
-  const afterChoices=[
-    {ar:'منتج آخر 🔄',en:'Another pick 🔄',next:'pickType'},
-    {ar:'دور على هدية 🎁',en:'Find a gift 🎁',next:'giftWho'},
-    {ar:'ابدأ من الأول',en:'Start over',next:'start'}
-  ];
-  renderChoices(afterChoices);
+  addTyping().then(()=>{
+    addBotMsg(currentLang==='ar'
+      ? 'عجبك؟ 😊 تقدر تضيف للسلة مباشرة، أو أساعدك في شيء ثاني:'
+      : 'Like anything? 😊 Add to cart directly, or let me help more:');
+    setTimeout(()=>{
+      renderChoices([
+        {ar:'اختيار ثاني 🔄',en:'Try another 🔄',next:'pickType'},
+        {ar:'دور هدية 🎁',en:'Find a gift 🎁',next:'giftWho'},
+        {ar:'ابدأ من الأول 🏠',en:'Start over 🏠',next:'start'}
+      ]);
+    },300);
+  });
 }
 
 const AVATAR_HTML=`<img class="chat-msg-avatar" src="logo/mr-clenso.png" alt="Mr. Clenso" onerror="this.outerHTML='<span class=\\'chat-msg-avatar\\'style=\\'background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border-radius:50%\\'>☕</span>'"/>`;
@@ -1600,6 +1606,7 @@ function renderChoices(choices){
     };
     box.appendChild(btn);
   });
+  scrollChat();
 }
 
 function buildRecCard(p){
